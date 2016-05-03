@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "name": "Select and Search",
   "version": "1.1",
   "description": "TBD",
@@ -19,7 +18,7 @@
     "content_scripts": [ 
     {
       "matches": ["http://*/*"],
-      "css": ["css/main.css","css/bootstrap.min.css","css/leaflet.label.css","css/leaflet.css","css/tooltipster.css","css/themes/tooltipster-noir.css","css/jquery-ui.css"]
+      "css": ["css/main.css", "css/leaflet.label.css","css/leaflet.css","css/tooltipster.css","css/themes/tooltipster-noir.css","css/jquery-ui.css"]
     }
   ],
   "background": {

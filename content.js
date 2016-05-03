@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 var mapArrayCountry;
 var mapArrayCity;
 var mapArrayArea;
@@ -19,7 +18,6 @@ var searchBox;
 chrome.extension.onMessage.addListener( function(message,sender,sendResponse) {
     lat = message.lat;
     lon = message.lon;
-
     startAtlas(lat, lon)
 });
 
