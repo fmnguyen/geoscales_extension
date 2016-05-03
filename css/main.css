@@ -1,0 +1,69 @@
+#loadingLayer-altas {
+  height: 100%;
+  width:100%;
+  background-color: white;
+}
+
+#loadingWheel-altas {
+  width: 40px;
+}
+a:link,a {
+    color: black !important;
+}
+
+a:visited {
+    color: black !important;
+}
+
+a:hover {
+    color: black !important;
+    text-decoration: none !important;
+}
+
+a:active {
+    color: black !important;
+}
+
+ .leaflet-tile { 
+  z-index: 2;
+  left: 0px;
+  top: 0px;
+
+}
+
+/*highlight tag*/
+.measure-atlas {
+	background-color:#FFA500;
+  text-decoration: underline;
+  font-weight: bold;
+  cursor: pointer; 
+  cursor: hand;
+}
+
+#personalizedmap {
+  width: 326px;
+  height: 326px;
+  /*border: 1px solid #d3d3d3;*/
+  margin: 0;
+  padding: 0;
+}
+
+#large {
+  width: 326px;
+  height: 326px;
+}
+
+#tootip_outer {
+  width: 326px;
+}
+#exp {
+  font-family: 'Raleway', "Arial";
+}
+
+
+.maplabel {
+	font: 10pt;
+}
+
+
+

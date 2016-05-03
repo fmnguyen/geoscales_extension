@@ -1,0 +1,112 @@
+body {
+  background: #FFFCF8;
+  font-family: 'Raleway', sans-serif;
+  font-size: 14pt;
+}
+
+button {
+  margin-right: 20px;
+  font-size: 12px;
+  overflow: hidden; 
+  text-overflow: ellipsis;
+}
+
+#description {
+  margin-left: 50px;
+  width: 905px;
+}
+
+#longDesc {
+  margin-left: 50px;
+  width: 905px;
+}
+
+#tool {
+  margin-left: 50px;
+  width: 905px;
+}
+
+.stroke {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1px;
+}
+
+.fill {
+  fill: #fff;
+}
+
+.mainSVG {
+}
+
+.g_0 {
+  touch-action: none;
+}
+
+.g_2 {
+  touch-action: none;
+}
+
+
+.graticule {
+  fill: none;
+  stroke: lightgrey;
+  stroke-width: .5px;
+  stroke-opacity: .5;
+  touch-action: none;
+}
+
+.land_0 {
+  fill: black;
+  opacity: .8;
+  touch-action: none;
+}
+
+.land_1 {
+  fill: lightgreen;
+  opacity: .8;
+  touch-action: none;
+}
+
+.large_land_0 {
+  fill: black;
+  opacity: 1;
+  fill-rule: evenodd;
+}
+
+.large_land_1 {
+  fill: lightgreen;
+  opacity: .9;
+  fill-rule: evenodd;
+}
+
+.boundary_0 {
+  fill: none;
+  stroke: grey;
+  stroke-width: 1px;
+}
+
+.boundary_1 {
+  fill: none;
+  stroke: white;
+  stroke-width: 1px;
+  opacity: .9;
+}
+
+.largeBackgroundRect {
+  touch-action: none;
+  fill-opacity: 0;
+  stroke-opacity: 1;
+  stroke: black;
+  /*touch-action: none;*/
+}
+
+@media screen and (max-device-width: 480px) and (orientation: portrait){
+  #testMobile { display: none; }
+
+}
+
+@media screen and (max-device-width: 640px) and (orientation: landscape){
+  #testMobile { display: none; }
+
+}

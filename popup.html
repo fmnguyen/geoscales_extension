@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+	body {
+		font-family: 'Raleway';
+		width: 450px;
+	}
+	#location-atlas{
+		padding: 20px;
+	}
+	#previousAddress {
+		cursor: pointer
+	}
+	#option-altas {
+		cursor: pointer;
+		position: fixed;
+		bottom: 2px;
+		right: 10px;
+	}
+	#loadingWheel {
+		width: 40px;
+	}
+</style>
+	<script src="js/jquery-2.2.3.js"></script>
+	<script src="js/jquery-ui.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Raleway:400,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+	<script type="text/javascript" src="background.js"></script>
+	<script type="text/javascript" src="popup.js"></script>
+	<script type="text/javascript" src="js/leaflet.js"></script>
+</head>
+<body>
+	<div id='location-atlas'> Please enter a location that you are familiar with. You can enter an exact address or the name of the place. <br><br>
+		<input type='text' id= 'searchBox' size='50'>&nbsp;&nbsp;
+		<button id='startAtlas'>Apply!</button> <br> <br>
+		<input type="checkbox" name="saveItForLater" id="saveItForLater" value="saveItForLater"> Save this address for later use.
+		<div id='wheel'></div>
+		<div id='err'></div>
+		<div id='previousAddress'></div> 
+		<a id="option-altas" target="_blank" href="option.html"><u> Go to the Option page. </u></a>
+	</div>
+</body>
+</html>
