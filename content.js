@@ -79,15 +79,16 @@ function doRequest(url,data,callback) {
 
 function highlight(article_content) {
         myind = 0;
+        content = article_content;
 //	content = $('body').text();
 //	console.log("content: "+content);
+	//convert expressions 3 million to numeric equivalent so that if they are distance or area they get tagged
         var myRegexpMega = /[\s]*([1-9][0-9]{0,2})[\s-]*(?:billion|million|thousand|trillion)[\s]*/g;   
         var myRegexThous = /thousand/;
         var myRegexMil = /million/;
         var myRegexBil = /billion/;
         var myRegexTril = /trillion/;
         var bilmatches;
-/*
         bilmatches = getMatches(content, myRegexpMega);
         for (var i = 0; i < bilmatches.length; i++) {
         //              console.log("bilmatch0: "+bilmatches[i][0]+" bilmatch1: "+bilmatches[i][1]);
@@ -113,9 +114,8 @@ function highlight(article_content) {
                         content= content.replace(mre, " "+bilmatches[i][1]+",000,000,000,000 ");
                 }
        }
-	$('body').text(content);
+//	$('body').text(content);
 	article_content = content;
-*/
 
 	var locationObj = {"location":[lat, lon]};
 	var areaMatch;
@@ -127,7 +127,8 @@ function highlight(article_content) {
     var resultCountry={};
     var sendToApi = {};
     //var myAreaRegexp = /([1-9](?:\d{0,2})(?:,\d{3})*(?:\.\d*[1-9])?|0?\.\d*[1-9]|0)[\s-]*((?:acre[\s-]*foot|acre[\s-]*feet|acres?|acre?|square[\s-]miles?|square[\s-]yards?|square[\s-]meters?|square[\s-]metres?|square[\s-]ft|square[\s-]feet|square[\s-]foot|ft^2|m\^2))/g;
-      var myAreaRegexp = /([1-9](?:\d{0,2})(?:,\d{3})*(?:\.\d*[1-9])?|0?\.\d*[1-9]|0)[\s-]*((?:acre[\s-]*foot|acre[\s-]*feet|acres?|acre?|square[\s-]miles?|square[\s-]yards?|square[\s-]meters?|square[\s-]metres?|square[\s-]ft|square[\s-]feet|square[\s-]foot|ft^2|m\^2|ft\<sup\>2|m<sup>2|km\<sup\>2|km2|mi2|mi<sup>2))/g;
+//currently the superscript 2 expressions are not working
+      var myAreaRegexp = /([1-9](?:\d{0,2})(?:,\d{3})*(?:\.\d*[1-9])?|0?\.\d*[1-9]|0)[\s-]*((?:acre[\s-]*foot|acre[\s-]*feet|acres?|acre?|square[\s-]miles?|square[\s-]yards?|square[\s-]meters?|square[\s-]metres?|square[\s-]ft|square[\s-]feet|square[\s-]foot|ft^2|m\^2|ft\<sup>2<\/sup>|m<sup>2<\/sup>|km\<sup>2<\/sup>|km2|mi2|mi<sup>2<\/sup>))/g;
     //  var myAreaRegexp = /([1-9](?:\d{0,2})(?:,\d{3})*(?:\.\d*[1-9])?|0?\.\d*[1-9]|0)[\s-]*((?:acre[\s-]*foot|acre[\s-]*feet|acres?|acre?|square[\s-]miles?|square[\s-]yards?|square[\s-]meters?|square[\s-]metres?|square[\s-]ft|square[\s-]feet|square[\s-]foot|ft^2|m\^2|ft<sup>2|m<sup>2|km<sup>2|km2|mi2|mi<sup>2))/g;
     var myDistanceRegexp = /([1-9](?:\d{0,2})(?:,\d{3})*(?:\.\d*[1-9])?|0?\.\d*[1-9]|0)[\s-]*((?:yd|yards?|\bfoot|\bfeet|mi[\s-]|MI[\s-]|Mi[\s-]|meters?|meter?|miles?|mile|Miles?|Mile?|metres?|kilometers?|km|mi\b|miles?))/g;
         var myCountryRegexp = /Andorra|United Arab Emirates|Afghanistan|Antigua and Barbuda|Anguilla|Albania|American Samoa|Austria|Aruba|Bosnia|Barbados|Belgium|Burkina Faso|Bulgaria|Bahrain|Burundi|Benin|Bermuda|Bolivia|Bhutan|Bouvet Island|Botswana|Belarus|Belize|Cocos Islands|Central African Republic|Congo|Switzerland|Cook Islands|Cameroon|Colombia|Costa Rica|Christmas Island|Cyprus|Czech Republic|Djibouti|Dominica|Dominican Republic|Algeria|Egypt|Western Sahara|Ethiopia|Micronesia|Gabon|Grenada|Georgia|French Guiana|Ghana|Gibraltar|Gambia|Guinea|Guadeloupe|South Georgia and the South Sandwich Islands|Guatemala|Guam|Guinea-Bissau|Guyana|Heard Island and McDonald Islands|Honduras|Hungary|Ireland|Israel|Syria|Swaziland|Turks and Caicos Islands|Chad|Togo|Tajikistan|Tokelau|Turkmenistan|Tonga|Trinidad and Tobago|Tuvalu|Ukraine|Uganda|Uruguay|Uzbekistan|Saint Vincent and the Grenadines|Virgin Islands|Wallis and Futuna|Mayotte|Zambia|Zimbabwe|British Indian Ocean Territory|Iraq|Iceland|Jamaica|Jordan|Kenya|Kyrgyzstan|Cambodia|Kiribati|Saint Kitts and Nevis|North Korea|Cayman Islands|Kazakhstan|Lebanon|Saint Lucia|Liechtenstein|Sri Lanka|Liberia|Lesotho|Luxembourg|Latvia|Libya|Morocco|Monaco|Moldova|Montenegro|Madagascar|Marshall Islands|Macedonia|Mali|Mongolia|Northern Mariana Islands|Martinique|Mauritania|Montserrat|Malta|Mauritius|Maldives|Mozambique|Namibia|Niger|Norfolk Island|Nigeria|Nicaragua|Nepal|Nauru|Niue|Peru|French Polynesia|Pakistan|Poland|Saint Pierre and Miquelon|Pitcairn Islands|Puerto Rico|Palau|Paraguay|Qatar|Romania|Serbia|Rwanda|Seychelles|Sudan|Singapore|Saint Helena|Slovenia|Slovakia|San Marino|Senegal|Somalia|Suriname|Sao Tome and Principe|El Salvador|Armenia|Angola|Argentina|Australia|Azerbaijan|Bangladesh|Brunei|Brazil|Bahamas|Canada|Ivory Coast|Chile|China|Cuba|Cape Verde|Germany|Denmark|Ecuador|Estonia|Eritrea|Spain|Finland|Fiji|Falkland Islands|Faroe Islands|France|United Kingdom|Greenland|Equatorial Guinea|Greece|Croatia|Haiti|Indonesia|India|Thailand|Timor-Leste|Tunisia|Turkey|Tanzania|United States|Venezuela|Vietnam|Vanuatu|Samoa|Yemen|South Africa|Iran|Italy|Japan|Comoros|South Korea|Kuwait|Lithuania|Myanmar|Malawi|Mexico|Malaysia|New Caledonia|Netherlands|Norway|New Zealand|Oman|Panama|Papua New Guinea|Philippines|Portugal|Russia|Saudi Arabia|Solomon Islands|Sweden|Jan Mayen|Sierra Leone|U.S.|Taiwan/g;
@@ -154,6 +155,35 @@ function highlight(article_content) {
         } else {
             responseArray = JSON.parse(response);
             final_content = $('body').html();
+
+		//convert the final content to the part that was run through tagger -- which first
+		//changed regex like 11 thousand|million etc to numeric equivalent 
+	      for (var i = 0; i < bilmatches.length; i++) {
+        //              console.log("bilmatch0: "+bilmatches[i][0]+" bilmatch1: "+bilmatches[i][1]);
+                //      bilmatches[i][0] = bilmatches[i][0].replace(re, '');
+                //      bilmatches[i][1] = bilmatches[i][1].replace(re, '');
+                var mre = new RegExp(bilmatches[i][0], "g");
+                var matchThous = myRegexThous.exec(bilmatches[i][0]);
+                var matchMil = myRegexMil.exec(bilmatches[i][0]);
+                var matchBil = myRegexBil.exec(bilmatches[i][0]);
+                var matchTril = myRegexTril.exec(bilmatches[i][0]);
+                if(matchThous!=null) {
+                        final_content= final_content.replace(mre, " "+bilmatches[i][1]+",000 ");
+                }
+                if(matchMil!=null) {
+                        final_content= final_content.replace(mre, " "+bilmatches[i][1]+",000,000 ");
+                }
+                if(matchBil!=null) {
+                       //myString = myString.replace(mre, " <<<"+bilmatches[i][1]+",000,000,000>>> ");
+                        final_content= final_content.replace(mre, " "+bilmatches[i][1]+",000,000,000 ");
+                }
+                if(matchTril!=null) {
+                       //myString = myString.replace(mre, " <<<"+bilmatches[i][1]+",000,000,000,000>>> ");
+                        final_content= final_content.replace(mre, " "+bilmatches[i][1]+",000,000,000,000 ");
+                }
+            }
+
+	    
             // console.log('finalcontent',final_content);
 
         	// for creating map later
