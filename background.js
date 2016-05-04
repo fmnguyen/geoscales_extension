@@ -6,4 +6,3 @@ chrome.tabs.executeScript(null, {file: "js/jquery.tooltipster.js"});
 chrome.tabs.executeScript(null, {file: "js/d3.js"});
 chrome.tabs.executeScript(null, {file: "js/topojson.js"});
 chrome.tabs.executeScript(null, {file: "content.js"});
-

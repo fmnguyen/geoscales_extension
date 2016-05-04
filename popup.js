@@ -3,7 +3,8 @@ var lat;
 var lon;
 
 chrome.extension.onMessage.addListener( function(message,sender,sendResponse) {
-  //if(message.stuff == "done")
+  if(message.stuff == "done")
+    $('#wheel').empty();
     //window.close();
 });
 
@@ -12,6 +13,7 @@ $(document).ready(function () {
   /**
    * Checks chrome.storage to see if the location is already saved
    * conditionally shows saved location if data exists
+   * Automatically calls submitAddress() if data exists when extension is loaded
    * @param  {object} data, object containing data in chrome.storage
    */
   chrome.storage.sync.get(function(data) {
@@ -20,10 +22,14 @@ $(document).ready(function () {
          $('#gs_location').text(data.location);
          $('#gs_info').empty().text('Chose a different location that you are familiar with.')
          $('#gs_saved_location').css('display', 'block');
+
+         lat = data.lat;
+         lon = data.lon;
       }
     }
     console.log('Your current location is: ' + data.location)
     console.log( 'lon: ' + data.lon + ', lat: ' + data.lat );
+    submitAddress(data);
   });
 
   $("#searchBox").autocomplete({
@@ -57,34 +63,53 @@ $(document).ready(function () {
           });
       },
       minLength: 1
-  }); //searchbox autocomplete ready
+  }); //searchBox autocomplete ready
 
-  $('.ui-autocomplete').click(function() {
-        lat = result['resources'][0]['bbox'][0];
-        lon =  result['resources'][0]['bbox'][1];
-  }) 
-
+  /**
+   * If autocorrect is chosen or selected, submits address with either 
+   * the enter keypress or if the apply button is pressed
+   */
   $('#startAtlas').click(function() {
     submitAddress();
   })
-
-  $('#searchbox').keyup(function(e){
-    if(e.keyCode === 13) // if user hit enter button
-      submitAddress();
+  $('#searchBox').keyup(function(e) {
+    if(e.keyCode === 13) {// if user hits 'enter'
+      submitAddress(); 
+    }
   });
 
   /**
    * Takes the user input and passes it to reference for rest of extension
    * Calls saveAddress() if user checks input-box
+   * @param {[object]} data, object containing chrome.storage data, assigns 
+   *                         variables is data exists, otherwise listens to autocorrect query
    * @throws {[err]} If user does not use auto-complete or if there is no input 
    */
-  function submitAddress() {
+  function submitAddress(data) {
     try {
-        lat = result['resources'][0]['bbox'][0];
-        lon = result['resources'][0]['bbox'][1];
-        var location = result['resources'][0]['name'];
+        var location;
 
-        if($('#saveItForLater').is(':checked')) {
+        if (data) {
+          lat = data.lat;
+          lon = data.lon;
+        } else {
+          var $val = $('#searchBox').val();
+          var $index;
+
+          // iterate through result object to match the chosen location name
+          for(var i = 0; i < result['resources'].length; i++ ) {
+            if(result['resources'][i].name === $val) {
+              $index = i;
+              break;
+            }
+          }
+
+          lat = result['resources'][$index]['bbox'][0];
+          lon = result['resources'][$index]['bbox'][1];
+          location = result['resources'][$index].name;
+        }
+
+        if($('#gs_save_button').is(':checked')) {
           saveAddress(lat, lon, location); 
         }
 
@@ -118,5 +143,4 @@ $(document).ready(function () {
       console.log('saved');
     });
   }
-
 }); // doc ready

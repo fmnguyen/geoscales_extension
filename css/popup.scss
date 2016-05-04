@@ -1,6 +1,6 @@
 body {
-	font-family: 'Raleway';
-	width: 375px;
+	font-family: 'Raleway', Helvetica, sans-serif;
+	width: 350px;
 }
 
 #location-atlas{
@@ -13,11 +13,12 @@ body {
 }
 
 #gs_saved_location {
-	padding: 5px 20px;
 	display: none;
+	padding: 5px 20px;
 	border-bottom: 1px #A0A0A0 solid;
 	#gs_location {
 		margin-top: 0;
+		font-size: 1.35em;
 	}
 }
 
@@ -56,13 +57,14 @@ body {
 	padding: 9px 0;
 	margin: 15px 0 6px 0;
 	text-indent: 10px;
+	width: 100%;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 	background-color: transparent;
 	border-style: groove;
 	font-size: 1em;
-	font-family: Helvetica, sans;   
+	font-family: Helvetica, sans-serif;   
 	&:focus {
 		outline: none;
 	}
