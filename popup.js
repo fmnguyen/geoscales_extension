@@ -9,9 +9,21 @@ chrome.extension.onMessage.addListener( function(message,sender,sendResponse) {
 
 $(document).ready(function () {
 
+  /**
+   * Checks chrome.storage to see if the location is already saved
+   * conditionally shows saved location if data exists
+   * @param  {object} data, object containing data in chrome.storage
+   */
   chrome.storage.sync.get(function(data) {
+    if(data) {
+      if('lon' in data && 'lat' in data && 'location' in data) { //if all data exists in object
+         $('#gs_location').text(data.location);
+         $('#gs_info').empty().text('Chose a different location that you are familiar with.')
+         $('#gs_saved_location').css('display', 'block');
+      }
+    }
     console.log('Your current location is: ' + data.location)
-    console.log('lon: ' + data.lon + ', lat: ' + data.lat );
+    console.log( 'lon: ' + data.lon + ', lat: ' + data.lat );
   });
 
   $("#searchBox").autocomplete({
@@ -48,12 +60,25 @@ $(document).ready(function () {
   }); //searchbox autocomplete ready
 
   $('.ui-autocomplete').click(function() {
-        
         lat = result['resources'][0]['bbox'][0];
         lon =  result['resources'][0]['bbox'][1];
   }) 
 
   $('#startAtlas').click(function() {
+    submitAddress();
+  })
+
+  $('#searchbox').keyup(function(e){
+    if(e.keyCode === 13) // if user hit enter button
+      submitAddress();
+  });
+
+  /**
+   * Takes the user input and passes it to reference for rest of extension
+   * Calls saveAddress() if user checks input-box
+   * @throws {[err]} If user does not use auto-complete or if there is no input 
+   */
+  function submitAddress() {
     try {
         lat = result['resources'][0]['bbox'][0];
         lon = result['resources'][0]['bbox'][1];
@@ -66,19 +91,16 @@ $(document).ready(function () {
         $('#err').empty();
         wheel = chrome.extension.getURL("images/loading.gif")
         $('#wheel').append("<center><img id='loadingWheel' src='images/loading.gif'></center>");
-        // $('#previousAddress').empty();
         chrome.tabs.query({active:true,currentWindow:true}, function(tab) {
-            chrome.tabs.sendMessage(tab[0].id, {lat:lat,lon:lon});
+          chrome.tabs.sendMessage(tab[0].id, {lat:lat,lon:lon});
         });
-        
-        // $('#previousAddress').append("<br> <u>Use this address: " +result['resources'][0]['name'] +  "</u>")
     }
-
     catch(err) {
-        $('#err').append("<br>Use autocomplete function to enter your address.")
+        $('#err').empty();
+        $error = $('<h4>', {class: 'error animated fadeInUp', text: "Please use the autocomplete function to enter your address." });
+        $('#err').append($error);
     }
-
-  })
+  }
 
   /**
    * Saves the latitude, longitude and location name of the 

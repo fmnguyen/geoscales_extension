@@ -7,28 +7,11 @@
 #loadingWheel-altas {
   width: 40px;
 }
-a:link,a {
-    color: black !important;
-}
 
-a:visited {
-    color: black !important;
-}
-
-a:hover {
-    color: black !important;
-    text-decoration: none !important;
-}
-
-a:active {
-    color: black !important;
-}
-
- .leaflet-tile { 
+.leaflet-tile { 
   z-index: 2;
   left: 0px;
   top: 0px;
-
 }
 
 /*highlight tag*/
@@ -56,14 +39,12 @@ a:active {
 #tootip_outer {
   width: 326px;
 }
+
 #exp {
   font-family: 'Raleway', "Arial";
 }
 
-
 .maplabel {
 	font: 10pt;
 }
-
-
 

@@ -1,44 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style type="text/css">
-	body {
-		font-family: 'Raleway';
-		width: 450px;
-	}
-	#location-atlas{
-		padding: 20px;
-	}
-	#previousAddress {
-		cursor: pointer
-	}
-	#option-altas {
-		cursor: pointer;
-		position: fixed;
-		bottom: 2px;
-		right: 10px;
-	}
-	#loadingWheel {
-		width: 40px;
-	}
-</style>
-	<script src="js/jquery-2.2.3.js"></script>
-	<script src="js/jquery-ui.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/normalize.css">
 	<link href='http://fonts.googleapis.com/css?family=Raleway:400,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="css/popup.css">
+	<script src="js/jquery-2.2.3.js"></script>
+	<script src="js/jquery-ui.js"></script>
 	<script type="text/javascript" src="background.js"></script>
 	<script type="text/javascript" src="popup.js"></script>
 	<script type="text/javascript" src="js/leaflet.js"></script>
 </head>
 <body>
-	<div id='location-atlas'> Please enter a location that you are familiar with. You can enter an exact address or the name of the place. <br><br>
-		<input type='text' id= 'searchBox' size='50'>&nbsp;&nbsp;
-		<button id='startAtlas'>Apply!</button> <br> <br>
-		<input type="checkbox" name="saveItForLater" id="saveItForLater" value="saveItForLater"> Save this address for later use.
+	<div id='gs_saved_location'>
+		<p class='gs_text'>Your currnet saved location is: </p>
+		<h2 id='gs_location'></h2>
+	</div>
+	<div id='location-atlas'> 
+		<p id='gs_info' class='gs_text'>Please enter a location that you are familiar with. You can enter an exact address or the name of the place.</p>
+		<input type='text' id='searchBox' size='50'>
+		<button id='startAtlas'>Apply!</button>
+		<div id='gs_save_button_container'>
+			<input type="checkbox" name="gs_save_button" id="gs_save_button">
+			<label for='gs_save_button' class='gs_save_label'>Save this address</label>
+		</div>
 		<div id='wheel'></div>
 		<div id='err'></div>
 		<div id='previousAddress'></div> 
-		<a id="option-altas" target="_blank" href="option.html"><u> Go to the Option page. </u></a>
+	</div>
+	<div id='gs_option_button_container'>
+		<a id="gs_option_altas" target="_blank" href="option.html">Go to the Option page.</a>
 	</div>
 </body>
 </html>

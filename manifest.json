@@ -14,8 +14,7 @@
     "geolocation",
     "storage"
   ],
-
-    "content_scripts": [ 
+  "content_scripts": [ 
     {
       "matches": ["http://*/*"],
       "css": ["css/main.css", "css/leaflet.label.css","css/leaflet.css","css/tooltipster.css","css/themes/tooltipster-noir.css","css/jquery-ui.css"]
@@ -25,9 +24,7 @@
     "scripts": ["js/jquery-2.2.3.js","js/jquery-ui.js","background.js"],
     "persistent": false
   },
-
   "options_page": "option.html", 
-
   "browser_action": {
       "default_title": "Highlight Text",
       "default_icon": "images/icon.png",

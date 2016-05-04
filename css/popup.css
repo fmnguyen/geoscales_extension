@@ -1,0 +1,52 @@
+body {
+  font-family: 'Raleway';
+  width: 375px; }
+
+#location-atlas {
+  padding: 6px 20px 20px 20px;
+  border-bottom: 1px #A0A0A0 solid; }
+
+#previousAddress {
+  cursor: pointer; }
+
+#gs_saved_location {
+  padding: 5px 20px;
+  display: none;
+  border-bottom: 1px #A0A0A0 solid; }
+  #gs_saved_location #gs_location {
+    margin-top: 0; }
+
+#gs_save_button_container {
+  float: right; }
+  #gs_save_button_container .gs_save_label {
+    margin-left: 2px; }
+    #gs_save_button_container .gs_save_label:hover {
+      cursor: pointer; }
+
+#gs_option_button_container {
+  padding: 25px 20px; }
+  #gs_option_button_container #gs_info {
+    margin-bottom: 10px; }
+  #gs_option_button_container #gs_option_altas {
+    cursor: pointer;
+    display: block; }
+
+#loadingWheel {
+  width: 40px; }
+
+#searchBox {
+  display: block;
+  padding: 9px 0;
+  margin: 15px 0 6px 0;
+  text-indent: 10px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background-color: transparent;
+  border-style: groove;
+  font-size: 1em;
+  font-family: Helvetica, sans; }
+  #searchBox:focus {
+    outline: none; }
+
+/*# sourceMappingURL=popup.css.map */
