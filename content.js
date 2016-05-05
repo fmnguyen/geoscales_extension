@@ -276,7 +276,7 @@ function create_tooltip() {
         key = this.id.split("-")[this.id.split("-").length-1];
         $(this).tooltipster({
             theme: 'tooltipster-noir',
-            content: $("<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayDistance[key][2] + '</b> is about <b>' + mapArrayDistance[key][3] + '</b> times longer than the distance between <b>you</b> and <b>' + mapArrayDistance[key][1] + '</b> in <b> ' + mapArrayDistance[key][4] + ', ' + mapArrayDistance[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>"),
+            content: $("<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayDistance[key][2] + '</b> is about <b>' + mapArrayDistance[key][3] + '</b> times the distance of between <b>you</b> and <b>' + mapArrayDistance[key][1] + '</b> in <b> ' + mapArrayDistance[key][4] + ', ' + mapArrayDistance[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>"),
             minWidth:340,
             maxWidth:350,
             'trigger':'click',
@@ -288,9 +288,9 @@ function create_tooltip() {
     $.each($('.area-atlas'), function(i,d) {
         key = this.id.split("-")[this.id.split("-").length-1];
         if (mapArrayArea[key][4] != "NA") {
-            tooltip_content_area = "<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + '</b> is about ' + mapArrayArea[key][3] + ' times bigger than <b>' + mapArrayArea[key][1] + '</b> in <b> ' + mapArrayArea[key][4] + ', ' + mapArrayArea[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>";
+            tooltip_content_area = "<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + '</b> is about ' + mapArrayArea[key][3] + ' times the size of <b>' + mapArrayArea[key][1] + '</b> in <b> ' + mapArrayArea[key][4] + ', ' + mapArrayArea[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>";
         } else {
-            tooltip_content_area = "<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + '</b> is about ' + mapArrayArea[key][3] + ' times bigger than <b>' + mapArrayArea[key][1] + ' state.' + "</div><br><div id='personalizedmap'></div></div>";
+            tooltip_content_area = "<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + '</b> is about ' + mapArrayArea[key][3] + ' times the size of <b>' + mapArrayArea[key][1] + ' state.' + "</div><br><div id='personalizedmap'></div></div>";
         }
         $(this).tooltipster({
             theme: 'tooltipster-noir',
@@ -321,7 +321,7 @@ function create_tooltip() {
         if (mapArrayCountry[key][8] == 'United States') {
             tooltip_content = "<div class='tootip_outer'><div id='exp'>"+'<b>'+ mapArrayCountry[key][8] + "</b> is your country.</div><br><div id='large'></div></div>";
         } else {
-            tooltip_content = "<div class='tootip_outer'><div id='exp'>"+'<b>'+ mapArrayCountry[key][8] + '</b> is about <b>' + mapArrayCountry[key][11] + '</b> times bigger than your <b>' + mapArrayCountry[key][0]+ "</b></div><br><div id='large'></div></div>";
+            tooltip_content = "<div class='tootip_outer'><div id='exp'>"+'<b>'+ mapArrayCountry[key][8] + '</b> is about <b>' + mapArrayCountry[key][11] + '</b> times the size of your <b>' + mapArrayCountry[key][0]+ "</b></div><br><div id='large'></div></div>";
         }
         $(this).tooltipster({
             theme: 'tooltipster-noir',
