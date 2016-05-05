@@ -346,7 +346,7 @@ function showDistanceMap(lat, lon, this_lat, this_lon,place,this_mult){
     try {
         distancemap = L.map('personalizedmap');
     } catch (e) {distancemap = distancemap}
-    distancemap.setView([(lat+this_lat)/2,(lon+this_lon)/2],11);
+    distancemap.setView([(lat+this_lat)/2,(lon+this_lon)/2],11,{ zoom: {animation: true}});
         var layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
         layer.addTo(distancemap);
         var m = L.marker([lat, lon], {draggable:true}).bindLabel('You', { noHide: true,className: "maplabel" })
@@ -372,7 +372,7 @@ function showAreaMap(lat, lon, contour ,place){
     try {
         areamap = L.map('personalizedmap');
     } catch (e) {areamap = areamap}
-    areamap.setView([lat, lon],6);
+    areamap.setView([lat, lon],8, { zoom: {animation: true}});
     var tempC = contour.split("],[");
     var tempLat;
     var tempLon;
