@@ -27,7 +27,7 @@
   },
   "options_page": "option.html", 
   "browser_action": {
-      "default_title": "Highlight Text",
+      "default_title": "Altas of Me",
       "default_icon": "images/icon.png",
       "default_popup": "popup.html"
   },
