@@ -3,7 +3,7 @@
   "version": "1.1",
   "description": "TBD",
   "permissions": [
-    "tabs"
+    "tabs",
     "activeTab",
     "https://ajax.googleapis.com/",
     "https://maps.google.com/*",
@@ -22,13 +22,13 @@
     }
   ],
   "background": {
-    "scripts": ["js/jquery-2.2.3.js","js/jquery-ui.js","background.js"],
+    "scripts": ["js/jquery-2.2.3.js","js/jquery-ui.js", "background.js"],
     "persistent": false
   },
   "options_page": "option.html", 
   "browser_action": {
-      "default_title": "Highlight Text",
-      "default_icon": "images/icon.png",
+      "default_title": "Select and Search",
+      "default_icon": "images/icon-inactive.png",
       "default_popup": "popup.html"
   },
   "web_accessible_resources": [

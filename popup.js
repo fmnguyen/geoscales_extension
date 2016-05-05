@@ -1,11 +1,29 @@
 var result;
 var lat;
 var lon;
+var env_variable = 'dev';
 
-chrome.extension.onMessage.addListener( function(message,sender,sendResponse) {
-  if(message.stuff == "done")
+/**
+ * Forces the background to run different actions dependent on messages received
+ * @case  {[string]}  message.stuff        , String returned when the content script is finished
+ *                                           Sets the icon to the active version, and adds active tab 
+ *                                           to the list of active tabs kept on the background
+ * @case  {[boolean]} message.startContent , true if lon/lat is saved in Chrome.storage
+ *                                           Calls submitAddress of the data saved if true
+ */ 
+chrome.runtime.onMessage.addListener( function(message, sender, sendResponse) {
+  if(message.stuff === "done") {
     $('#wheel').empty();
-    //window.close();
+    chrome.tabs.query({active:true, currentWindow:true}, function(tab) {
+      chrome.browserAction.setIcon({path: "images/icon.png", tabId:tab[0].id});
+      chrome.runtime.sendMessage({ tabAction: 'addTab', tabId: tab[0].id});
+    });
+    if(env_variable === 'prod') // keep extension open in dev mode
+      window.close(); 
+  } 
+  else if (message.startContent) {
+    submitAddress(data);
+  }
 });
 
 $(document).ready(function () {
@@ -13,23 +31,27 @@ $(document).ready(function () {
   /**
    * Checks chrome.storage to see if the location is already saved
    * conditionally shows saved location if data exists
-   * Automatically calls submitAddress() if data exists when extension is loaded
+   * Automatically calls submitAddress() if data exists when extension is loaded, and the tab is not already active
    * @param  {object} data, object containing data in chrome.storage
    */
   chrome.storage.sync.get(function(data) {
     if(data) {
       if('lon' in data && 'lat' in data && 'location' in data) { //if all data exists in object
-         $('#gs_location').text(data.location);
-         $('#gs_info').empty().text('Chose a different location that you are familiar with.')
-         $('#gs_saved_location').css('display', 'block');
+        $('#gs_location').text(data.location);
+        $('#gs_info').empty().text('Chose a different location that you are familiar with.')
+        $('#gs_saved_location').css('display', 'block');
+        lat = data.lat;
+        lon = data.lon;
 
-         lat = data.lat;
-         lon = data.lon;
+        // get response if tab is active w/ extension
+        // @return true if extension is already running on tab, false if extension is not running
+        chrome.runtime.sendMessage({tabAction: 'checkTabActive'}, function(response) {
+          if (!response) {
+            submitAddress(data);
+          }
+        }); 
       }
-    }
-    console.log('Your current location is: ' + data.location)
-    console.log( 'lon: ' + data.lon + ', lat: ' + data.lat );
-    submitAddress(data);
+    } 
   });
 
   $("#searchBox").autocomplete({
@@ -89,13 +111,12 @@ $(document).ready(function () {
     try {
         var location;
 
-        if (data) {
+        if (data) { // if data exists locally, just pull from chrome.storage
           lat = data.lat;
           lon = data.lon;
-        } else {
+        } else { // otherwise grab the location + lon/lat from the results
           var $val = $('#searchBox').val();
           var $index;
-
           // iterate through result object to match the chosen location name
           for(var i = 0; i < result['resources'].length; i++ ) {
             if(result['resources'][i].name === $val) {
@@ -103,24 +124,29 @@ $(document).ready(function () {
               break;
             }
           }
-
           lat = result['resources'][$index]['bbox'][0];
           lon = result['resources'][$index]['bbox'][1];
           location = result['resources'][$index].name;
         }
-
-        if($('#gs_save_button').is(':checked')) {
+        
+        //if the user checks the save button, save the location in chrome.storage
+        if($('#gs_save_button').is(':checked')) { 
           saveAddress(lat, lon, location); 
         }
 
+        //remove all errors and pre-existing loading wheels and append a new loading wheel
         $('#err').empty();
+        $('#wheel').empty();
         wheel = chrome.extension.getURL("images/loading.gif")
         $('#wheel').append("<center><img id='loadingWheel' src='images/loading.gif'></center>");
-        chrome.tabs.query({active:true,currentWindow:true}, function(tab) {
-          chrome.tabs.sendMessage(tab[0].id, {lat:lat,lon:lon});
+
+        // send message to start content.js and the extension
+        chrome.tabs.query({active:true, currentWindow:true}, function(tab) {
+          chrome.tabs.sendMessage(tab[0].id, { startContent: true, lat:lat, lon:lon });
         });
+
     }
-    catch(err) {
+    catch(err) {;
         $('#err').empty();
         $error = $('<h4>', {class: 'error animated fadeInUp', text: "Please use the autocomplete function to enter your address." });
         $('#err').append($error);
@@ -138,9 +164,29 @@ $(document).ready(function () {
     chrome.storage.sync.set({
       'location': location,
       'lat': lat,
-      'lon': lon
+      'lon': lon,
+      //'active': true
     }, function() {
       console.log('saved');
     });
   }
+
+  //code for pausing the application
+  //$('#gs_pause_button').click(function(e) {
+  //
+  //  if()
+  //  chrome.tabs.query({active: true, currentWindow: true}, function(tab){
+  //    chrome.browserAction.setIcon({path: "images/icon-inactive.png", tabId:tab.id});
+  //  });  
+  //  chrome.storage.sync.set({
+  //    'active': false
+  //  })
+  //  // reload webpage
+  //  // hide search box   
+  //   
+  //  window.close();
+  //});
+
+
+
 }); // doc ready

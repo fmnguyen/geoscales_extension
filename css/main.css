@@ -16,7 +16,7 @@
 
 /*highlight tag*/
 .measure-atlas {
-	background-color:#FFA500;
+	background-color:#FFD500;
   text-decoration: underline;
   font-weight: bold;
   cursor: pointer; 
@@ -41,7 +41,7 @@
 }
 
 #exp {
-  font-family: 'Raleway', "Arial";
+  font-family: 'Raleway', "Arial", sans-serif;
 }
 
 .maplabel {

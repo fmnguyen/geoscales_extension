@@ -14,11 +14,13 @@ var lat;
 var lon;
 var searchBox;
 
-//recieve lat, lon from popup.js
-chrome.extension.onMessage.addListener( function(message,sender,sendResponse) {
-    lat = message.lat;
-    lon = message.lon;
-    startAtlas(lat, lon)
+//recieve the lat/lon of a location and run the start script
+chrome.runtime.onMessage.addListener( function(message,sender,sendResponse) {
+    if(message.startContent) {
+      lat = message.lat;
+      lon = message.lon;
+      startAtlas(lat, lon)
+    }
 });
 
 function startAtlas (lat, lon) {
@@ -329,10 +331,7 @@ function create_tooltip() {
             functionAfter: function(origin) { $('#large').empty()}
          });
     });
-   chrome.extension.sendMessage({stuff:"done"},function(reponse){
-    // send msg to the popup.js "done"
-    });
-
+  chrome.extension.sendMessage( { stuff:"done" });
 
 } //create_tooltip end
 
