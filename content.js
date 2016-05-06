@@ -150,7 +150,8 @@ function highlight(article_content) {
 
     
     sendToApi = {locationObj,countryMatchOjb,areaMatchOjb,distanceMatchOjb,stateOjb}
-	var urimerge = "http://visualization.ischool.uw.edu:5000/todo/api/v1.0/merge/";
+	// var urimerge = "http://visualization.ischool.uw.edu:5000/todo/api/v1.0/merge/";
+    var urimerge = "http://flask-env.82nggiyg3i.us-west-2.elasticbeanstalk.com/todo/api/v1.0/merge/";
 	doRequest(urimerge, JSON.stringify(sendToApi), function(err, response) { 
         if (err) {
             console.log('Error: ' + err);
