@@ -12,22 +12,19 @@ var env_variable = 'dev';
  *                                           Calls submitAddress of the data saved if true
  */ 
 chrome.runtime.onMessage.addListener( function(message, sender, sendResponse) {
-  if(message.stuff === "done") {
+  if(message.tabAction === "completeHighlight") {
     $('#wheel').empty();
-    chrome.tabs.query({active:true, currentWindow:true}, function(tab) {
-      chrome.browserAction.setIcon({path: "images/icon.png", tabId:tab[0].id});
-      chrome.runtime.sendMessage({ tabAction: 'addTab', tabId: tab[0].id});
-    });
     if(env_variable === 'prod') // keep extension open in dev mode
       window.close(); 
-  } 
+  } else if (message.tabAction == "checkTabActive") {
+    console.log("checking in message in popup")
+  }
   else if (message.startContent) {
     submitAddress(data);
   }
 });
 
 $(document).ready(function () {
-
   /**
    * Checks chrome.storage to see if the location is already saved
    * conditionally shows saved location if data exists
@@ -45,44 +42,54 @@ $(document).ready(function () {
 
         // get response if tab is active w/ extension
         // @return true if extension is already running on tab, false if extension is not running
-        chrome.runtime.sendMessage({tabAction: 'checkTabActive'}, function(response) {
-          if (!response) {
-            submitAddress(data);
-          }
-        }); 
+        if('activeTabs' in data) {
+          chrome.tabs.query({active: true, currentWindow: true}, function(tab) {
+            if(!data.activeTabs[tab[0].id]){
+              console.log("This tab isn't active")
+              submitAddress(data);
+            } else {
+              console.log('This tab is active')
+              submitAddress(data);
+            }
+          });
+        }
+      } 
+      else { //if lon/lat/location haven't been set yet, then the storage hasn't been saved yet
+        chrome.storage.sync.set({ 'activeTabs': '{}' }); // this means we want to start storing our activeTabs
       }
     } 
   });
 
   $("#searchBox").autocomplete({
       source: function (request, response) {
-          $.ajax({
-              url: "https://dev.virtualearth.net/REST/v1/Locations",
-              countryRegion: 'US',
-              dataType: "json",
-              data: {
-                  key: "AhLlK-nI7fJvXr7VViCTVzu6HlhZrkR7G9bsGhe1Ip7aOpsvSRThphl8LL3308KI",
-                  q: request.term
-              },
-              jsonp: "jsonp",
+        $.ajax({
+          url: "https://dev.virtualearth.net/REST/v1/Locations",
+          countryRegion: 'US',
+          dataType: "json",
+          data: {
+            key: "AhLlK-nI7fJvXr7VViCTVzu6HlhZrkR7G9bsGhe1Ip7aOpsvSRThphl8LL3308KI",
+            q: request.term
+          },
+          jsonp: "jsonp",
 
-              success: function (data) {
-                  result = data.resourceSets[0];
-                  console.log(result);
-                  if (result) {
-                      if (result.estimatedTotal > 0) {
-                          response($.map(result.resources, function (item) {
-                              if(item.address.countryRegion == 'United States') {
-                              return {
-                                  data: item,
-                                  value: item.name
-                              }
-                          }
-                          }));
-                      }
+          success: function (data) {
+            result = data.resourceSets[0];
+            console.log(result);
+            if (result) {
+              if (result.estimatedTotal > 0) {
+                response($.map(result.resources, function (item) {
+                  if(item.address.countryRegion == 'United States') {
+                    return {
+                      data: item,
+                      value: item.name
+                    }
                   }
+                }));
               }
-          });
+            }
+          }
+
+        });
       },
       minLength: 1
   }); //searchBox autocomplete ready
@@ -109,47 +116,47 @@ $(document).ready(function () {
    */
   function submitAddress(data) {
     try {
-        var location;
+      var location;
 
-        if (data) { // if data exists locally, just pull from chrome.storage
-          lat = data.lat;
-          lon = data.lon;
-        } else { // otherwise grab the location + lon/lat from the results
-          var $val = $('#searchBox').val();
-          var $index;
-          // iterate through result object to match the chosen location name
-          for(var i = 0; i < result['resources'].length; i++ ) {
-            if(result['resources'][i].name === $val) {
-              $index = i;
-              break;
-            }
+      if (data) { // if data exists locally, just pull from chrome.storage
+        lat = data.lat;
+        lon = data.lon;
+      } else { // otherwise grab the location + lon/lat from the results
+        var $val = $('#searchBox').val();
+        var $index;
+        // iterate through result object to match the chosen location name
+        for(var i = 0; i < result['resources'].length; i++ ) {
+          if(result['resources'][i].name === $val) {
+            $index = i;
+            break;
           }
-          lat = result['resources'][$index]['bbox'][0];
-          lon = result['resources'][$index]['bbox'][1];
-          location = result['resources'][$index].name;
         }
-        
-        //if the user checks the save button, save the location in chrome.storage
-        if($('#gs_save_button').is(':checked')) { 
-          saveAddress(lat, lon, location); 
-        }
+        lat = result['resources'][$index]['bbox'][0];
+        lon = result['resources'][$index]['bbox'][1];
+        location = result['resources'][$index].name;
+      }
+      
+      //if the user checks the save button, save the location in chrome.storage
+      if($('#gs_save_button').is(':checked')) { 
+        saveAddress(lat, lon, location); 
+      }
 
-        //remove all errors and pre-existing loading wheels and append a new loading wheel
-        $('#err').empty();
-        $('#wheel').empty();
-        wheel = chrome.extension.getURL("images/loading.gif")
-        $('#wheel').append("<center><img id='loadingWheel' src='images/loading.gif'></center>");
+      //remove all errors and pre-existing loading wheels and append a new loading wheel
+      $('#err').empty();
+      $('#wheel').empty();
+      wheel = chrome.extension.getURL("images/loading.gif")
+      $('#wheel').append("<center><img id='loadingWheel' src='images/loading.gif'></center>");
 
-        // send message to start content.js and the extension
-        chrome.tabs.query({active:true, currentWindow:true}, function(tab) {
-          chrome.tabs.sendMessage(tab[0].id, { startContent: true, lat:lat, lon:lon });
-        });
+      // send message to start content.js and the extension
+      chrome.tabs.query({active:true, currentWindow:true}, function(tab) {
+        chrome.tabs.sendMessage(tab[0].id, { startContent: true, lat:lat, lon:lon });
+      });
 
     }
     catch(err) {;
-        $('#err').empty();
-        $error = $('<h4>', {class: 'error animated fadeInUp', text: "Please use the autocomplete function to enter your address." });
-        $('#err').append($error);
+      $('#err').empty();
+      $error = $('<h4>', {class: 'error animated fadeInUp', text: "Please use the autocomplete function to enter your address." });
+      $('#err').append($error);
     }
   }
 
@@ -161,13 +168,14 @@ $(document).ready(function () {
    * @param  {[string]} location location by name that appears in auto-complete
    */
   function saveAddress(lat, lon, location) {
-    chrome.storage.sync.set({
-      'location': location,
-      'lat': lat,
-      'lon': lon,
-      //'active': true
-    }, function() {
-      console.log('saved');
+    chrome.tabs.query({active: true, currentWindow: true}, function(tab) {
+      chrome.storage.sync.set({
+        'location': location,
+        'lat': lat,
+        'lon': lon
+      }, function() {
+        console.log('saved');
+      });
     });
   }
 
