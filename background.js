@@ -10,21 +10,20 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     case "addTab":
       chrome.tabs.query({active: true, currentWindow: true}, function(tab) {
         var activeTabs;
-        chrome.storage.sync.get(function(data) {
-          activeTabs = JSON.parse(data.activeTabs);
-          if(!activeTabs[tab[0].id]) {
-            activeTabs[tab[0].id] = true;
-            activeTabs = JSON.stringify(activeTabs);
-            console.log(activeTabs);
-            chrome.storage.sync.set({
-              'activeTabs': activeTabs
-            }, function() {
-              console.log('Saved the current tab');
-            });
-          } else {
-            console.log("This tab is already listed as active")
-          }
-        });
+        // chrome.storage.sync.get( function(data) {
+        //   console.log(data)
+        //   activeTabs = data.activeTabs;
+        //   if(!activeTabs[tab[0].id]) {
+        //     activeTabs[tab[0].id] = true;
+        //     chrome.storage.sync.set({
+        //       'activeTabs': JSON.stringify(activeTabs)
+        //     }, function() {
+        //       console.log('Saved the current tab');
+        //     });
+        //   } else {
+        //     console.log("This tab is already listed as active")
+        //   }
+        // });
       });
       break;
 
@@ -89,8 +88,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   else if(changeInfo == 'complete') {
     var activeTabs;
     chrome.storage.sync.get(function(data) {
-      activeTabs = JSON.parse(data.activeTabs);
-      console.log(activeTabs);
+      activeTabs = data.activeTabs;
       if(activeTabs[tabId] && 'lon' in data && 'lat' in data && 'location' in data) {
         chrome.browserAction.setIcon({path: "images/icon.png", tabId:tabId});
         chrome.tabs.query({active: true, currentWindow: true}, function(tab){
@@ -104,8 +102,9 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 
 chrome.tabs.onRemoved.addListener( function(tabId, removeInfo){
   chrome.storage.sync.get(function(data) {
-    activeTabs = JSON.parse(data.activeTabs);
+    activeTabs = data.activeTabs;
     delete activeTabs[tabId];
+    activeTabs = JSON.stringify(activeTabs);
     chrome.storage.sync.set({
       'activeTabs': activeTabs
     }, function() {
@@ -116,9 +115,10 @@ chrome.tabs.onRemoved.addListener( function(tabId, removeInfo){
 
 chrome.tabs.onReplaced.addListener( function(newTabId, oldTabId) {
   chrome.storage.sync.get(function(data) {
-    activeTabs = JSON.parse(data.activeTabs);
+    activeTabs = data.activeTabs;
     if(activeTabs[oldTabId]) activeTabs[newTabId] = true;
     delete activeTabs[oldTabId];
+    activeTabs = JSON.stringify(activeTabs);
     chrome.storage.sync.set({
       'activeTabs': activeTabs
     }, function() {

@@ -40,23 +40,25 @@ $(document).ready(function () {
         lat = data.lat;
         lon = data.lon;
 
-        // get response if tab is active w/ extension
-        // @return true if extension is already running on tab, false if extension is not running
-        if('activeTabs' in data) {
-          chrome.tabs.query({active: true, currentWindow: true}, function(tab) {
-            tabs = JSON.parse(data.activeTabs);
-            if(!tabs[tab[0].id]){
-              console.log("This tab isn't active")
-              submitAddress(data);
-            } else {
-              console.log('This tab is active')
-              submitAddress(data);
-            }
-          });
-        }
+        submitAddress(data);
+
+        // // get response if tab is active w/ extension
+        // // @return true if extension is already running on tab, false if extension is not running
+        // if('activeTabs' in data) {
+        //   chrome.tabs.query({active: true, currentWindow: true}, function(tab) {
+        //     tabs = data.activeTabs);
+        //     if(!tabs[tab[0].id]){
+        //       console.log("This tab isn't active")
+        //       submitAddress(data);
+        //     } else {
+        //       console.log('This tab is active')
+        //       submitAddress(data);
+        //     }
+        //   });
+        // }
       } 
       else { //if lon/lat/location haven't been set yet, then the storage hasn't been saved yet
-        chrome.storage.sync.set({ 'activeTabs': '{}' }); // this means we want to start storing our activeTabs
+        //chrome.storage.sync.set({ activeTabs: JSON.stringify({}) }); // this means we want to start storing our activeTabs
       }
     } 
   });
