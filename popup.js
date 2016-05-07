@@ -1,7 +1,7 @@
 var result;
 var lat;
 var lon;
-var env_variable = 'dev';
+var env_variable = 'dev'; // change to prod for when in production
 
 /**
  * Forces the background to run different actions dependent on messages received
@@ -152,6 +152,7 @@ $(document).ready(function () {
 
       // send message to start content.js and the extension
       chrome.tabs.query({active:true, currentWindow:true}, function(tab) {
+        chrome.browserAction.setIcon({path: "images/icon.png", tabId:tab[0].id});
         chrome.tabs.sendMessage(tab[0].id, { startContent: true, lat:lat, lon:lon });
       });
 

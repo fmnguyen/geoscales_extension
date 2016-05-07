@@ -9,6 +9,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
     case "addTab":
       chrome.tabs.query({active: true, currentWindow: true}, function(tab) {
+        
         var activeTabs;
         // chrome.storage.sync.get( function(data) {
         //   console.log(data)
@@ -51,31 +52,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 });
 
 /**
- * Adds a listener to everytime a tab is navigated to (activated)
- * If the tab is already active with the extension, changes the icon to an active form
- * @param  {[object]} activeInfo, object with two fields: int tabId and int windowId
- *    for more info: https://developer.chrome.com/extensions/tabs#event-onActivated
- */
-chrome.tabs.onActivated.addListener(function (activeInfo) {
-  console.log('activated')
-  // if(activeTabs[activeInfo.tabId]) {
-  //   chrome.browserAction.setIcon({path: "images/icon.png", tabId:activeInfo.tabId});
-  //   console.log('check icon after activated')
-  // } 
-  // else {
-  //   chrome.storage.sync.get(function(data){
-  //     if(data) {
-  //       if('lon' in data && 'lat' in data && 'location' in data) { //if all data exists in object
-  //         console.log('sending message after activated')
-  //         chrome.tabs.sendMessage(activeInfo.tabId, { startContent: true, lat: data.lat, lon: data.lon });
-  //       }
-  //     }
-  //   });
-  //   chrome.browserAction.setIcon({path: "images/icon-inactive.png", tabId:activeInfo.tabid});
-  // }
-});
-
-/**
  * Adds a listener to everytime a tab is updated
  * If the tab is already active with the extension, changes the icon to an active form
  * @param  {[object]} activeInfo, object with two fields: int tabId and int windowId
@@ -92,7 +68,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
       if(activeTabs[tabId] && 'lon' in data && 'lat' in data && 'location' in data) {
         chrome.browserAction.setIcon({path: "images/icon.png", tabId:tabId});
         chrome.tabs.query({active: true, currentWindow: true}, function(tab){
-          chrome.tabs.sendMessage(tab[0].id, { startContent: true, lat: data.lat, lon: data.lon});
+          //chrome.tabs.sendMessage(tab[0].id, { startContent: true, lat: data.lat, lon: data.lon});
         });
         console.log('check icon after updated')
       } 
@@ -139,13 +115,13 @@ chrome.tabs.executeScript(null, {file: "content.js"});
 /**
  * Checks the cache to check if data exists, and starts the extension without opening the pop-up
  */
-chrome.storage.sync.get(function(data) {
-    if(data) {
-      if('lon' in data && 'lat' in data && 'location' in data) { //if all data exists in object
-        chrome.tabs.query({active: true, currentWindow: true}, function(tab){
-          console.log('checking storage to see if data exists in background')
-          chrome.tabs.sendMessage(tab[0].id, { startContent: true, lat: data.lat, lon: data.lon});
-        });
-      }
-    }
-});
+// chrome.storage.sync.get(function(data) {
+//     if(data) {
+//       if('lon' in data && 'lat' in data && 'location' in data) { //if all data exists in object
+//         chrome.tabs.query({active: true, currentWindow: true}, function(tab){
+//           console.log('checking storage to see if data exists in background')
+//           chrome.tabs.sendMessage(tab[0].id, { startContent: true, lat: data.lat, lon: data.lon});
+//         });
+//       }
+//     }
+// });

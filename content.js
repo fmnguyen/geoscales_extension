@@ -275,20 +275,18 @@ function create_tooltip() {
     key = this.id.split("-")[this.id.split("-").length-1];
     $(this).tooltipster({
       theme: 'tooltipster-noir',
-      content: $("<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayDistance[key][2] + "</b> is about <br> <div class='mult-atlas'>" + mapArrayDistance[key][3] + ' times  </div>the distance of between <b>you</b> and <b>' + mapArrayDistance[key][1] + '</b> in <b> ' + mapArrayDistance[key][4] + ', ' + mapArrayDistance[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>"),
+      content: $("<div class='tooltip_outer'><div id='exp'>" + '<b>'+ mapArrayDistance[key][2] + "</b> is about <br> <div class='mult-atlas'>" + mapArrayDistance[key][3] + ' times  </div>the distance of between <b>you</b> and <b>' + mapArrayDistance[key][1] + '</b> in <b> ' + mapArrayDistance[key][4] + ', ' + mapArrayDistance[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>"),
       minWidth:288,
       maxWidth:310,
+      speed: 0,
       'trigger':'click',
       functionReady: function(origin, tooltip) { 
         key = origin[0].id.split("-")[origin[0].id.split("-").length-1]; 
-        setTimeout(showDistanceMap(lat, lon, mapArrayDistance[key][0][0], mapArrayDistance[key][0][1],mapArrayDistance[key][1],mapArrayDistance[key][3]), 1000)
-        
+        showDistanceMap(lat, lon, mapArrayDistance[key][0][0], mapArrayDistance[key][0][1],mapArrayDistance[key][1],mapArrayDistance[key][3])
       },
       functionAfter: function(origin) {
-        for(var i; i < layers.length; i++) {
-          distancemap.removeLayer(layers[i]);
-        }
-        layers = [];
+        distancemap.remove();
+        distancemap = undefined;
       }
     });
   });
@@ -296,9 +294,9 @@ function create_tooltip() {
   $.each($('.area-atlas'), function(i,d) {
     key = this.id.split("-")[this.id.split("-").length-1];
     if (mapArrayArea[key][4] != "NA") {
-      tooltip_content_area = "<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayArea[key][3] + ' times </div> the size of <b>' + mapArrayArea[key][1] + '</b> in <b> ' + mapArrayArea[key][4] + ', ' + mapArrayArea[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>";
+      tooltip_content_area = "<div class='tooltip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayArea[key][3] + ' times </div> the size of <b>' + mapArrayArea[key][1] + '</b> in <b> ' + mapArrayArea[key][4] + ', ' + mapArrayArea[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>";
     } else {
-      tooltip_content_area = "<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayArea[key][3] + ' times </div> the size of <b>' + mapArrayArea[key][1] + ' state.' + "</div><br><div id='personalizedmap'></div></div>";
+      tooltip_content_area = "<div class='tooltip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayArea[key][3] + ' times </div> the size of <b>' + mapArrayArea[key][1] + ' state.' + "</div><br><div id='personalizedmap'></div></div>";
     }
     $(this).tooltipster({
       theme: 'tooltipster-noir',
@@ -330,7 +328,7 @@ function create_tooltip() {
     topoid = mapArrayCountry[key][9];
     keyword = mapArrayCountry[key][10];
     this_mult = mapArrayCountry[key][11];
-    tooltip_content = "<div class='tootip_outer'><div id='exp'>"+'<b>'+ mapArrayCountry[key][8] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayCountry[key][11] + ' times </div> the size of your <b>' + mapArrayCountry[key][0]+ "</b></div><br><div id='large'></div></div>";
+    tooltip_content = "<div class='tooltip_outer'><div id='exp'>"+'<b>'+ mapArrayCountry[key][8] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayCountry[key][11] + ' times </div> the size of your <b>' + mapArrayCountry[key][0]+ "</b></div><br><div id='large'></div></div>";
     $(this).tooltipster({
       theme: 'tooltipster-noir',
       content: $(tooltip_content),
@@ -367,6 +365,12 @@ function showDistanceMap(lat, lon, this_lat, this_lon,place,this_mult){
     else {
       distancemap = distancemap;
     }
+
+    for(var i; i < layers.length; i++) {
+      distancemap.removeLayer(layers[i]);
+    }
+    layers = [];
+
     console.log(layers);
 
     distancemap.setView([(lat+this_lat)/2,(lon+this_lon)/2],11,{ zoom: {animation: true}});
