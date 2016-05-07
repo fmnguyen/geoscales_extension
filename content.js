@@ -515,7 +515,7 @@ function drawfromarticle(matchObject, center_lat,center_lon, userarea, this_coun
       
       largeCanvasContext.clearRect(0, 0, largeWidth, largeHeight);
       largeCanvasContext.strokeStyle = "#333", largeCanvasContext.lineWidth = 1, largeCanvasContext.strokeRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
-      largeCanvasContext.fillStyle = "#b2d0d0", largeCanvasContext.fillRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
+      largeCanvasContext.fillStyle = "#d2e3e3", largeCanvasContext.fillRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
 
       largeCanvasContext.fillStyle = colors[0], largeCanvasContext.beginPath(), largeMapObjects[0].path(basemap), largeCanvasContext.fill();
       largeCanvasContext.strokeStyle = "black", largeCanvasContext.lineWidth = .5, largeCanvasContext.beginPath(), largeMapObjects[0].path(basemap), largeCanvasContext.stroke();
@@ -533,7 +533,7 @@ function drawfromarticle(matchObject, center_lat,center_lon, userarea, this_coun
       targetmap = topojson.merge(world, world.objects.counties.geometries.filter(function(d) { return targetid.has(d.id); }));
       largeCanvasContext.clearRect(0, 0, largeWidth, largeHeight);
       largeCanvasContext.strokeStyle = "#333", largeCanvasContext.lineWidth = 1, largeCanvasContext.strokeRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
-      largeCanvasContext.fillStyle = "#b2d0d0", largeCanvasContext.fillRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
+      largeCanvasContext.fillStyle = "#d2e3e3", largeCanvasContext.fillRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
 
       largeCanvasContext.fillStyle = colors[0], largeCanvasContext.beginPath(), largeMapObjects[0].path(basemap), largeCanvasContext.fill();
       largeCanvasContext.strokeStyle = "black", largeCanvasContext.lineWidth = .5, largeCanvasContext.beginPath(), largeMapObjects[0].path(basemap), largeCanvasContext.stroke();
@@ -580,7 +580,7 @@ function setUpLargeMaps(lat, lon, name) {
 var drawCanvasLarge = function() {
   largeCanvasContext.clearRect(0, 0, largeWidth, largeHeight);
   largeCanvasContext.strokeStyle = "#333", largeCanvasContext.lineWidth = 1, largeCanvasContext.strokeRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
-  largeCanvasContext.fillStyle = "#b2d0d0", largeCanvasContext.fillRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
+  largeCanvasContext.fillStyle = "#d2e3e3", largeCanvasContext.fillRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
 
   largeCanvasContext.fillStyle = colors[0], largeCanvasContext.beginPath(), largeMapObjects[0].path(basemap), largeCanvasContext.fill();
   largeCanvasContext.strokeStyle = "black", largeCanvasContext.lineWidth = .5, largeCanvasContext.beginPath(), largeMapObjects[0].path(basemap), largeCanvasContext.stroke();
