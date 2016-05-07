@@ -429,8 +429,8 @@ function showAreaMap(lat, lon, contour ,place){
   areamap.fitBounds(group.getBounds()); 
 }
 
-var largeWidth = 326;
-var largeHeight = 326;
+var largeWidth = 280;
+var largeHeight = 280;
 var padding = 5;
 var transitionDuration = 800;
 var largeCanvasContext;
