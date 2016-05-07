@@ -44,7 +44,8 @@ $(document).ready(function () {
         // @return true if extension is already running on tab, false if extension is not running
         if('activeTabs' in data) {
           chrome.tabs.query({active: true, currentWindow: true}, function(tab) {
-            if(!data.activeTabs[tab[0].id]){
+            tabs = JSON.parse(data.activeTabs);
+            if(!tabs[tab[0].id]){
               console.log("This tab isn't active")
               submitAddress(data);
             } else {

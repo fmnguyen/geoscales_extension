@@ -13,6 +13,7 @@ var final_content;
 var lat;
 var lon;
 var searchBox;
+var layers = [];
 
 //recieve the lat/lon of a location and run the start script
 chrome.runtime.onMessage.addListener( function(message,sender,sendResponse) {
@@ -117,7 +118,6 @@ function highlight(article_content) {
 	var areaMatch;
 	var distanceMatch;
 	var countryMatch = [];
-<<<<<<< HEAD
   var stateMatch = [];
   var resultArea={};
   var resultDistance={};
@@ -128,20 +128,7 @@ function highlight(article_content) {
   var myAreaRegexp = /([1-9](?:\d{0,2})(?:,\d{3})*(?:\.\d*[1-9])?|0?\.\d*[1-9]|0)[\s-]*((?:acre[\s-]*foot|acre[\s-]*feet|acres?|acre?|square[\s-]miles?|square[\s-]yards?|square[\s-]meters?|square[\s-]metres?|square[\s-]ft|square[\s-]feet|square[\s-]foot|ft^2|m\^2|ft\<sup>2<\/sup>|m<sup>2<\/sup>|km\<sup>2<\/sup>|km2|mi2|mi<sup>2<\/sup>))/g;
   //  var myAreaRegexp = /([1-9](?:\d{0,2})(?:,\d{3})*(?:\.\d*[1-9])?|0?\.\d*[1-9]|0)[\s-]*((?:acre[\s-]*foot|acre[\s-]*feet|acres?|acre?|square[\s-]miles?|square[\s-]yards?|square[\s-]meters?|square[\s-]metres?|square[\s-]ft|square[\s-]feet|square[\s-]foot|ft^2|m\^2|ft<sup>2|m<sup>2|km<sup>2|km2|mi2|mi<sup>2))/g;
   var myDistanceRegexp = /([1-9](?:\d{0,2})(?:,\d{3})*(?:\.\d*[1-9])?|0?\.\d*[1-9]|0)[\s-]*((?:yd|yards?|\bfoot|\bfeet|mi[\s-]|MI[\s-]|Mi[\s-]|meters?|meter?|miles?|mile|Miles?|Mile?|metres?|kilometers?|km|mi\b|miles?))/g;
-  var myCountryRegexp = /Andorra|United Arab Emirates|Afghanistan|Antigua and Barbuda|Anguilla|Albania|American Samoa|Austria|Aruba|Bosnia|Barbados|Belgium|Burkina Faso|Bulgaria|Bahrain|Burundi|Benin|Bermuda|Bolivia|Bhutan|Bouvet Island|Botswana|Belarus|Belize|Cocos Islands|Central African Republic|Congo|Switzerland|Cook Islands|Cameroon|Colombia|Costa Rica|Christmas Island|Cyprus|Czech Republic|Djibouti|Dominica|Dominican Republic|Algeria|Egypt|Western Sahara|Ethiopia|Micronesia|Gabon|Grenada|Georgia|French Guiana|Ghana|Gibraltar|Gambia|Guinea|Guadeloupe|South Georgia and the South Sandwich Islands|Guatemala|Guam|Guinea-Bissau|Guyana|Heard Island and McDonald Islands|Honduras|Hungary|Ireland|Israel|Syria|Swaziland|Turks and Caicos Islands|Chad|Togo|Tajikistan|Tokelau|Turkmenistan|Tonga|Trinidad and Tobago|Tuvalu|Ukraine|Uganda|Uruguay|Uzbekistan|Saint Vincent and the Grenadines|Virgin Islands|Wallis and Futuna|Mayotte|Zambia|Zimbabwe|British Indian Ocean Territory|Iraq|Iceland|Jamaica|Jordan|Kenya|Kyrgyzstan|Cambodia|Kiribati|Saint Kitts and Nevis|North Korea|Cayman Islands|Kazakhstan|Lebanon|Saint Lucia|Liechtenstein|Sri Lanka|Liberia|Lesotho|Luxembourg|Latvia|Libya|Morocco|Monaco|Moldova|Montenegro|Madagascar|Marshall Islands|Macedonia|Mali|Mongolia|Northern Mariana Islands|Martinique|Mauritania|Montserrat|Malta|Mauritius|Maldives|Mozambique|Namibia|Niger|Norfolk Island|Nigeria|Nicaragua|Nepal|Nauru|Niue|Peru|French Polynesia|Pakistan|Poland|Saint Pierre and Miquelon|Pitcairn Islands|Puerto Rico|Palau|Paraguay|Qatar|Romania|Serbia|Rwanda|Seychelles|Sudan|Singapore|Saint Helena|Slovenia|Slovakia|San Marino|Senegal|Somalia|Suriname|Sao Tome and Principe|El Salvador|Armenia|Angola|Argentina|Australia|Azerbaijan|Bangladesh|Brunei|Brazil|Bahamas|Canada|Ivory Coast|Chile|China|Cuba|Cape Verde|Germany|Denmark|Ecuador|Estonia|Eritrea|Spain|Finland|Fiji|Falkland Islands|Faroe Islands|France|United Kingdom|Greenland|Equatorial Guinea|Greece|Croatia|Haiti|Indonesia|India|Thailand|Timor-Leste|Tunisia|Turkey|Tanzania|United States|Venezuela|Vietnam|Vanuatu|Samoa|Yemen|South Africa|Iran|Italy|Japan|Comoros|South Korea|Kuwait|Lithuania|Myanmar|Malawi|Mexico|Malaysia|New Caledonia|Netherlands|Norway|New Zealand|Oman|Panama|Papua New Guinea|Philippines|Portugal|Russia|Saudi Arabia|Solomon Islands|Sweden|Jan Mayen|Sierra Leone|U.S.|Taiwan/g;
-=======
-    var stateMatch = [];
-    var resultArea={};
-    var resultDistance={};
-    var resultCountry={};
-    var sendToApi = {};
-    //var myAreaRegexp = /([1-9](?:\d{0,2})(?:,\d{3})*(?:\.\d*[1-9])?|0?\.\d*[1-9]|0)[\s-]*((?:acre[\s-]*foot|acre[\s-]*feet|acres?|acre?|square[\s-]miles?|square[\s-]yards?|square[\s-]meters?|square[\s-]metres?|square[\s-]ft|square[\s-]feet|square[\s-]foot|ft^2|m\^2))/g;
-//currently the superscript 2 expressions are not working
-      var myAreaRegexp = /([1-9](?:\d{0,2})(?:,\d{3})*(?:\.\d*[1-9])?|0?\.\d*[1-9]|0)[\s-]*((?:acre[\s-]*foot|acre[\s-]*feet|acres?|acre?|square[\s-]miles?|square[\s-]yards?|square[\s-]meters?|square[\s-]metres?|square[\s-]ft|square[\s-]feet|square[\s-]foot|ft^2|m\^2|ft\<sup>2<\/sup>|m<sup>2<\/sup>|km\<sup>2<\/sup>|km2|mi2|mi<sup>2<\/sup>))/g;
-    //  var myAreaRegexp = /([1-9](?:\d{0,2})(?:,\d{3})*(?:\.\d*[1-9])?|0?\.\d*[1-9]|0)[\s-]*((?:acre[\s-]*foot|acre[\s-]*feet|acres?|acre?|square[\s-]miles?|square[\s-]yards?|square[\s-]meters?|square[\s-]metres?|square[\s-]ft|square[\s-]feet|square[\s-]foot|ft^2|m\^2|ft<sup>2|m<sup>2|km<sup>2|km2|mi2|mi<sup>2))/g;
-    var myDistanceRegexp = /([1-9](?:\d{0,2})(?:,\d{3})*(?:\.\d*[1-9])?|0?\.\d*[1-9]|0)[\s-]*((?:yd|yards?|\bfoot|\bfeet|mi[\s-]|MI[\s-]|Mi[\s-]|meters?|meter?|miles?|mile|Miles?|Mile?|metres?|kilometers?|km|mi\b|miles?))/g;
-        var myCountryRegexp = /Andorra|United Arab Emirates|Afghanistan|Antigua and Barbuda|Anguilla|Albania|American Samoa|Austria|Aruba|Bosnia|Barbados|Belgium|Burkina Faso|Bulgaria|Bahrain|Burundi|Benin|Bermuda|Bolivia|Bhutan|Bouvet Island|Botswana|Belarus|Belize|Cocos Islands|Central African Republic|Congo|Switzerland|Cook Islands|Cameroon|Colombia|Costa Rica|Christmas Island|Cyprus|Czech Republic|Djibouti|Dominica|Dominican Republic|Algeria|Egypt|Western Sahara|Ethiopia|Micronesia|Gabon|Grenada|Georgia|French Guiana|Ghana|Gibraltar|Gambia|Guinea|Guadeloupe|South Georgia and the South Sandwich Islands|Guatemala|Guam|Guinea-Bissau|Guyana|Heard Island and McDonald Islands|Honduras|Hungary|Ireland|Israel|Syria|Swaziland|Turks and Caicos Islands|Chad|Togo|Tajikistan|Tokelau|Turkmenistan|Tonga|Trinidad and Tobago|Tuvalu|Ukraine|Uganda|Uruguay|Uzbekistan|Saint Vincent and the Grenadines|Virgin Islands|Wallis and Futuna|Mayotte|Zambia|Zimbabwe|British Indian Ocean Territory|Iraq|Iceland|Jamaica|Jordan|Kenya|Kyrgyzstan|Cambodia|Kiribati|Saint Kitts and Nevis|North Korea|Cayman Islands|Kazakhstan|Lebanon|Saint Lucia|Liechtenstein|Sri Lanka|Liberia|Lesotho|Luxembourg|Latvia|Libya|Morocco|Monaco|Moldova|Montenegro|Madagascar|Marshall Islands|Macedonia|Mali|Mongolia|Northern Mariana Islands|Martinique|Mauritania|Montserrat|Malta|Mauritius|Maldives|Mozambique|Namibia|Niger|Norfolk Island|Nigeria|Nicaragua|Nepal|Nauru|Niue|Peru|French Polynesia|Pakistan|Poland|Saint Pierre and Miquelon|Pitcairn Islands|Puerto Rico|Palau|Paraguay|Qatar|Romania|Serbia|Rwanda|Seychelles|Sudan|Singapore|Saint Helena|Slovenia|Slovakia|San Marino|Senegal|Somalia|Suriname|Sao Tome and Principe|El Salvador|Armenia|Angola|Argentina|Australia|Azerbaijan|Bangladesh|Brunei|Brazil|Bahamas|Canada|Ivory Coast|Chile|China|Cuba|Cape Verde|Germany|Denmark|Ecuador|Estonia|Eritrea|Spain|Finland|Fiji|Falkland Islands|Faroe Islands|France|United Kingdom|Greenland|Equatorial Guinea|Greece|Croatia|Haiti|Indonesia|India|Thailand|Timor-Leste|Tunisia|Turkey|Tanzania|Venezuela|Vietnam|Vanuatu|Samoa|Yemen|South Africa|Iran|Italy|Japan|Comoros|South Korea|Kuwait|Lithuania|Myanmar|Malawi|Mexico|Malaysia|New Caledonia|Netherlands|Norway|New Zealand|Oman|Panama|Papua New Guinea|Philippines|Portugal|Russia|Saudi Arabia|Solomon Islands|Sweden|Jan Mayen|Sierra Leone|Taiwan/g;
->>>>>>> 0a52b7db8fee3e1fa779edafbb2f0e9b82140e79
+  var myCountryRegexp = /Andorra|United Arab Emirates|Afghanistan|Antigua and Barbuda|Anguilla|Albania|American Samoa|Austria|Aruba|Bosnia|Barbados|Belgium|Burkina Faso|Bulgaria|Bahrain|Burundi|Benin|Bermuda|Bolivia|Bhutan|Bouvet Island|Botswana|Belarus|Belize|Cocos Islands|Central African Republic|Congo|Switzerland|Cook Islands|Cameroon|Colombia|Costa Rica|Christmas Island|Cyprus|Czech Republic|Djibouti|Dominica|Dominican Republic|Algeria|Egypt|Western Sahara|Ethiopia|Micronesia|Gabon|Grenada|Georgia|French Guiana|Ghana|Gibraltar|Gambia|Guinea|Guadeloupe|South Georgia and the South Sandwich Islands|Guatemala|Guam|Guinea-Bissau|Guyana|Heard Island and McDonald Islands|Honduras|Hungary|Ireland|Israel|Syria|Swaziland|Turks and Caicos Islands|Chad|Togo|Tajikistan|Tokelau|Turkmenistan|Tonga|Trinidad and Tobago|Tuvalu|Ukraine|Uganda|Uruguay|Uzbekistan|Saint Vincent and the Grenadines|Virgin Islands|Wallis and Futuna|Mayotte|Zambia|Zimbabwe|British Indian Ocean Territory|Iraq|Iceland|Jamaica|Jordan|Kenya|Kyrgyzstan|Cambodia|Kiribati|Saint Kitts and Nevis|North Korea|Cayman Islands|Kazakhstan|Lebanon|Saint Lucia|Liechtenstein|Sri Lanka|Liberia|Lesotho|Luxembourg|Latvia|Libya|Morocco|Monaco|Moldova|Montenegro|Madagascar|Marshall Islands|Macedonia|Mali|Mongolia|Northern Mariana Islands|Martinique|Mauritania|Montserrat|Malta|Mauritius|Maldives|Mozambique|Namibia|Niger|Norfolk Island|Nigeria|Nicaragua|Nepal|Nauru|Niue|Peru|French Polynesia|Pakistan|Poland|Saint Pierre and Miquelon|Pitcairn Islands|Puerto Rico|Palau|Paraguay|Qatar|Romania|Serbia|Rwanda|Seychelles|Sudan|Singapore|Saint Helena|Slovenia|Slovakia|San Marino|Senegal|Somalia|Suriname|Sao Tome and Principe|El Salvador|Armenia|Angola|Argentina|Australia|Azerbaijan|Bangladesh|Brunei|Brazil|Bahamas|Canada|Ivory Coast|Chile|China|Cuba|Cape Verde|Germany|Denmark|Ecuador|Estonia|Eritrea|Spain|Finland|Fiji|Falkland Islands|Faroe Islands|France|United Kingdom|Greenland|Equatorial Guinea|Greece|Croatia|Haiti|Indonesia|India|Thailand|Timor-Leste|Tunisia|Turkey|Tanzania|Venezuela|Vietnam|Vanuatu|Samoa|Yemen|South Africa|Iran|Italy|Japan|Comoros|South Korea|Kuwait|Lithuania|Myanmar|Malawi|Mexico|Malaysia|New Caledonia|Netherlands|Norway|New Zealand|Oman|Panama|Papua New Guinea|Philippines|Portugal|Russia|Saudi Arabia|Solomon Islands|Sweden|Jan Mayen|Sierra Leone|Taiwan/g;
     
   areaMatch = getMatches(article_content, myAreaRegexp)
   distanceMatch = getMatches(article_content, myDistanceRegexp);
@@ -290,8 +277,14 @@ function create_tooltip() {
       minWidth:340,
       maxWidth:350,
       'trigger':'click',
-      functionReady: function(origin, tooltip) { key = origin[0].id.split("-")[origin[0].id.split("-").length-1]; showDistanceMap(lat,lon,mapArrayDistance[key][0][0],mapArrayDistance[key][0][1],mapArrayDistance[key][1],mapArrayDistance[key][3])},
-      functionAfter: function(origin) {distancemap.remove()}
+      functionReady: function(origin, tooltip) { 
+        key = origin[0].id.split("-")[origin[0].id.split("-").length-1]; 
+        showDistanceMap(lat, lon, mapArrayDistance[key][0][0],mapArrayDistance[key][0][1],mapArrayDistance[key][1],mapArrayDistance[key][3])
+      },
+      functionAfter: function(origin) {
+        //distancemap.remove();
+        return;
+      }
     });
   });
 
@@ -308,8 +301,13 @@ function create_tooltip() {
       minWidth:340,
       maxWidth:350,
       'trigger':'click',
-      functionReady: function(origin, tooltip) { key = origin[0].id.split("-")[origin[0].id.split("-").length-1]; showAreaMap(lat,lon,mapArrayArea[key][0][0],mapArrayArea[key][1])},
-      functionAfter: function(origin) {areamap.remove()}
+      functionReady: function(origin, tooltip) { 
+        key = origin[0].id.split("-")[origin[0].id.split("-").length-1]; 
+        showAreaMap(lat,lon,mapArrayArea[key][0][0],mapArrayArea[key][1]);
+      },
+      functionAfter: function(origin) {
+        areamap.remove()
+      }
     });
   });
 
@@ -327,20 +325,28 @@ function create_tooltip() {
     topoid = mapArrayCountry[key][9];
     keyword = mapArrayCountry[key][10];
     this_mult = mapArrayCountry[key][11];
-    if (mapArrayCountry[key][8] == 'United States') {
-      tooltip_content = "<div class='tootip_outer'><div id='exp'>"+'<b>'+ mapArrayCountry[key][8] + "</b> is your country.</div><br><div id='large'></div></div>";
-    } else {
-      tooltip_content = "<div class='tootip_outer'><div id='exp'>"+'<b>'+ mapArrayCountry[key][8] + '</b> is about <b>' + mapArrayCountry[key][11] + '</b> times the size of your <b>' + mapArrayCountry[key][0]+ "</b></div><br><div id='large'></div></div>";
-    }
+    tooltip_content = "<div class='tootip_outer'><div id='exp'>"+'<b>'+ mapArrayCountry[key][8] + '</b> is about <b>' + mapArrayCountry[key][11] + '</b> times the size of your <b>' + mapArrayCountry[key][0]+ "</b></div><br><div id='large'></div></div>";
     $(this).tooltipster({
       theme: 'tooltipster-noir',
       content: $(tooltip_content),
       minWidth:340,
       maxWidth:350,
       'trigger':'click',
-      functionReady: function(origin, tooltip) { key=origin[0].id.split("-")[origin[0].id.split("-").length-1]; drawfromarticle(mapArrayCountry[key][0], parseFloat(mapArrayCountry[key][1]) ,parseFloat(mapArrayCountry[key][2]), mapArrayCountry[key][3], parseFloat(mapArrayCountry[key][4]), parseFloat(mapArrayCountry[key][5]), mapArrayCountry[key][6], 100, mapArrayCountry[key][9],'') },
+      functionReady: function(origin, tooltip) { 
+        key=origin[0].id.split("-")[origin[0].id.split("-").length-1]; 
+        drawfromarticle(mapArrayCountry[key][0], 
+          parseFloat(mapArrayCountry[key][1]) ,
+          parseFloat(mapArrayCountry[key][2]), 
+          mapArrayCountry[key][3], 
+          parseFloat(mapArrayCountry[key][4]), 
+          parseFloat(mapArrayCountry[key][5]), 
+          mapArrayCountry[key][6], 100, 
+          mapArrayCountry[key][9],'') 
+      },
       // functionReady: function(origin, tooltip) { console.log(); drawfromarticle(key) },
-      functionAfter: function(origin) { $('#large').empty() }
+      functionAfter: function(origin) { 
+        $('#large').empty() 
+      }
      });
   });
 
@@ -351,15 +357,22 @@ function create_tooltip() {
 
 function showDistanceMap(lat, lon, this_lat, this_lon,place,this_mult){
     try {
-        distancemap = L.map('personalizedmap');
-    } catch (e) 
-    {
+      distancemap = L.map('personalizedmap');
+    } 
+    catch (e) {
+      console.log('enter catch')
       distancemap = distancemap
     }
+
+    for(var i; i < layers.length; i++) {
+      map.removeLayer(layers[i]);
+    }
+    layers = [];
 
     distancemap.setView([(lat+this_lat)/2,(lon+this_lon)/2],11,{ zoom: {animation: true}});
     var layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
     layer.addTo(distancemap);
+    layers.push(layer);
     var m = L.marker([lat, lon], {draggable:true}).bindLabel('You', { noHide: true,className: "maplabel" })
         .addTo(distancemap)
         .showLabel();
