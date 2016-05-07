@@ -270,7 +270,7 @@ function highlight(article_content) {
 
 
 function create_tooltip() {
-  $('.measure').parent().removeAttr('href');
+  $('.measure-altas').parent().removeAttr('href');
   $.each($('.distance-atlas'), function(i,d) {
     key = this.id.split("-")[this.id.split("-").length-1];
     $(this).tooltipster({
