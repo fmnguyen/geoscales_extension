@@ -13,6 +13,7 @@ var final_content;
 var lat;
 var lon;
 var searchBox;
+var distancemap;
 var layers = [];
 
 //recieve the lat/lon of a location and run the start script
@@ -145,7 +146,7 @@ function highlight(article_content) {
 
     
   sendToApi = {locationObj,countryMatchOjb,areaMatchOjb,distanceMatchOjb,stateOjb}
-	// var urimerge = "http://visualization.ischool.uw.edu:5000/todo/api/v1.0/merge/";
+	//var urimerge = "http://visualization.ischool.uw.edu:5000/todo/api/v1.0/merge/";
   var urimerge = "http://flask-env.82nggiyg3i.us-west-2.elasticbeanstalk.com/todo/api/v1.0/merge/";
 
 	doRequest(urimerge, JSON.stringify(sendToApi), function(err, response) { 
@@ -269,21 +270,23 @@ function highlight(article_content) {
 
 
 function create_tooltip() {
+
   $.each($('.distance-atlas'), function(i,d) {
     key = this.id.split("-")[this.id.split("-").length-1];
     $(this).tooltipster({
       theme: 'tooltipster-noir',
-      content: $("<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayDistance[key][2] + "</b> is about <br> <div class='mult-atlas'>" + mapArrayDistance[key][3] + ' times  </div>the distance of between <b>you</b> and <b>' + mapArrayDistance[key][1] + '</b> in <b> ' + mapArrayDistance[key][4] + ', ' + mapArrayDistance[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>"),
+      content: $("<div class='tooltip_outer'><div id='exp'>" + '<b>'+ mapArrayDistance[key][2] + "</b> is about <br> <div class='mult-atlas'>" + mapArrayDistance[key][3] + ' times  </div>the distance of between <b>you</b> and <b>' + mapArrayDistance[key][1] + '</b> in <b> ' + mapArrayDistance[key][4] + ', ' + mapArrayDistance[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>"),
       minWidth:288,
       maxWidth:310,
+      speed: 0,
       'trigger':'click',
       functionReady: function(origin, tooltip) { 
         key = origin[0].id.split("-")[origin[0].id.split("-").length-1]; 
-        showDistanceMap(lat, lon, mapArrayDistance[key][0][0],mapArrayDistance[key][0][1],mapArrayDistance[key][1],mapArrayDistance[key][3])
+        showDistanceMap(lat, lon, mapArrayDistance[key][0][0], mapArrayDistance[key][0][1],mapArrayDistance[key][1],mapArrayDistance[key][3])
       },
       functionAfter: function(origin) {
-        //distancemap.remove();
-        return;
+        distancemap.remove();
+        distancemap = undefined;
       }
     });
   });
@@ -291,9 +294,9 @@ function create_tooltip() {
   $.each($('.area-atlas'), function(i,d) {
     key = this.id.split("-")[this.id.split("-").length-1];
     if (mapArrayArea[key][4] != "NA") {
-      tooltip_content_area = "<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayArea[key][3] + ' times </div> the size of <b>' + mapArrayArea[key][1] + '</b> in <b> ' + mapArrayArea[key][4] + ', ' + mapArrayArea[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>";
+      tooltip_content_area = "<div class='tooltip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayArea[key][3] + ' times </div> the size of <b>' + mapArrayArea[key][1] + '</b> in <b> ' + mapArrayArea[key][4] + ', ' + mapArrayArea[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>";
     } else {
-      tooltip_content_area = "<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayArea[key][3] + ' times </div> the size of <b>' + mapArrayArea[key][1] + ' state.' + "</div><br><div id='personalizedmap'></div></div>";
+      tooltip_content_area = "<div class='tooltip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayArea[key][3] + ' times </div> the size of <b>' + mapArrayArea[key][1] + ' state.' + "</div><br><div id='personalizedmap'></div></div>";
     }
     $(this).tooltipster({
       theme: 'tooltipster-noir',
@@ -325,7 +328,7 @@ function create_tooltip() {
     topoid = mapArrayCountry[key][9];
     keyword = mapArrayCountry[key][10];
     this_mult = mapArrayCountry[key][11];
-    tooltip_content = "<div class='tootip_outer'><div id='exp'>"+'<b>'+ mapArrayCountry[key][8] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayCountry[key][11] + ' times </div> the size of your <b>' + mapArrayCountry[key][0]+ "</b></div><br><div id='large'></div></div>";
+    tooltip_content = "<div class='tooltip_outer'><div id='exp'>"+'<b>'+ mapArrayCountry[key][8] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayCountry[key][11] + ' times </div> the size of your <b>' + mapArrayCountry[key][0]+ "</b></div><br><div id='large'></div></div>";
     $(this).tooltipster({
       theme: 'tooltipster-noir',
       content: $(tooltip_content),
@@ -356,38 +359,48 @@ function create_tooltip() {
 
 
 function showDistanceMap(lat, lon, this_lat, this_lon,place,this_mult){
-    try {
+    if(distancemap == undefined) {
       distancemap = L.map('personalizedmap');
-    } 
-    catch (e) {
-      console.log('enter catch')
-      distancemap = distancemap
+    }
+    else {
+      distancemap = distancemap;
     }
 
     for(var i; i < layers.length; i++) {
-      map.removeLayer(layers[i]);
+      distancemap.removeLayer(layers[i]);
     }
     layers = [];
+
+    console.log(layers);
 
     distancemap.setView([(lat+this_lat)/2,(lon+this_lon)/2],11,{ zoom: {animation: true}});
     var layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
     layer.addTo(distancemap);
     layers.push(layer);
+
     var m = L.marker([lat, lon], {draggable:true}).bindLabel('You', { noHide: true,className: "maplabel" })
         .addTo(distancemap)
         .showLabel();
+    layers.push(m);
 
     var m2 = L.marker([this_lat, this_lon], {draggable:true}).bindLabel(place, { noHide: true })
         .addTo(distancemap)
         .showLabel();
+    layers.push(m2);
     
     var polygon = L.polygon(
           [[lat,lon],[this_lat,this_lon]], {
             color:'#736440'
           });
-    polygon.bindLabel("The distance between the two cities is  " + this_mult + " times longer than the distance between you and " + place, { noHide: true }).addTo(distancemap);
-    
+    polygon.bindLabel(
+      "The distance between the two cities is  " + this_mult + " times longer than the distance between you and " + place, 
+      { noHide: true })
+        .addTo(distancemap);
+    layers.push(polygon);
+
+    console.log(layers)
     var group = new L.featureGroup([m, m2]);
+
     distancemap.fitBounds(group.getBounds().pad(1)); 
 }
 
