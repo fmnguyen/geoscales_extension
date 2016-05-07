@@ -16,15 +16,13 @@ chrome.runtime.onMessage.addListener( function(message, sender, sendResponse) {
     $('#wheel').empty();
     if(env_variable === 'prod') // keep extension open in dev mode
       window.close(); 
-  } else if (message.tabAction == "checkTabActive") {
-    console.log("checking in message in popup")
-  }
-  else if (message.startContent) {
-    submitAddress(data);
+  } else if (message.startContent) {
+    submitAddress(message);
   }
 });
 
 $(document).ready(function () {
+  
   /**
    * Checks chrome.storage to see if the location is already saved
    * conditionally shows saved location if data exists
@@ -39,26 +37,7 @@ $(document).ready(function () {
         $('#gs_saved_location').css('display', 'block');
         lat = data.lat;
         lon = data.lon;
-
         submitAddress(data);
-
-        // // get response if tab is active w/ extension
-        // // @return true if extension is already running on tab, false if extension is not running
-        // if('activeTabs' in data) {
-        //   chrome.tabs.query({active: true, currentWindow: true}, function(tab) {
-        //     tabs = data.activeTabs);
-        //     if(!tabs[tab[0].id]){
-        //       console.log("This tab isn't active")
-        //       submitAddress(data);
-        //     } else {
-        //       console.log('This tab is active')
-        //       submitAddress(data);
-        //     }
-        //   });
-        // }
-      } 
-      else { //if lon/lat/location haven't been set yet, then the storage hasn't been saved yet
-        //chrome.storage.sync.set({ activeTabs: JSON.stringify({}) }); // this means we want to start storing our activeTabs
       }
     } 
   });
@@ -198,7 +177,5 @@ $(document).ready(function () {
   //   
   //  window.close();
   //});
-
-
 
 }); // doc ready

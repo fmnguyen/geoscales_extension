@@ -9,7 +9,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
     case "addTab":
       chrome.tabs.query({active: true, currentWindow: true}, function(tab) {
-        
         var activeTabs;
         // chrome.storage.sync.get( function(data) {
         //   console.log(data)
@@ -111,17 +110,3 @@ chrome.tabs.executeScript(null, {file: "js/jquery.tooltipster.js"});
 chrome.tabs.executeScript(null, {file: "js/d3.js"});
 chrome.tabs.executeScript(null, {file: "js/topojson.js"});
 chrome.tabs.executeScript(null, {file: "content.js"});
-
-/**
- * Checks the cache to check if data exists, and starts the extension without opening the pop-up
- */
-// chrome.storage.sync.get(function(data) {
-//     if(data) {
-//       if('lon' in data && 'lat' in data && 'location' in data) { //if all data exists in object
-//         chrome.tabs.query({active: true, currentWindow: true}, function(tab){
-//           console.log('checking storage to see if data exists in background')
-//           chrome.tabs.sendMessage(tab[0].id, { startContent: true, lat: data.lat, lon: data.lon});
-//         });
-//       }
-//     }
-// });

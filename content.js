@@ -307,7 +307,7 @@ function create_tooltip() {
       'trigger':'click',
       functionReady: function(origin, tooltip) { 
         key = origin[0].id.split("-")[origin[0].id.split("-").length-1]; 
-        showAreaMap(lat,lon,mapArrayArea[key][0][0],mapArrayArea[key][1]);
+        showAreaMap( lat, lon, mapArrayArea[key][0][0], mapArrayArea[key][1]);
       },
       functionAfter: function(origin) {
         areamap.remove(); 
@@ -355,8 +355,6 @@ function create_tooltip() {
       }
      });
   });
-
-  chrome.runtime.sendMessage( { tabAction: "addTab" });
   chrome.runtime.sendMessage( { tabAction: "completeHighlight" });
 } //create_tooltip end
 
@@ -376,10 +374,12 @@ function showDistanceMap(lat, lon, this_lat, this_lon,place,this_mult){
 
   distancemap.setView(
     [(lat + this_lat) / 2, (lon + this_lon) / 2], 
-    11, 
-    { zoom: {animation: true}});
+    8, 
+    { zoom: {animate: true}});
   
-  var layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
+  var layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    
+  });
   layer.addTo(distancemap);
 
   var m = L.marker([lat, lon], {draggable:true}).bindLabel('You', { noHide: true,className: "maplabel" })
@@ -406,7 +406,7 @@ function showDistanceMap(lat, lon, this_lat, this_lon,place,this_mult){
 }
 
 
-function showAreaMap(lat, lon, contour ,place){
+function showAreaMap(lat, lon, contour, place){
   
   if(distancemap == undefined) {
     console.log('instantiating new map')
@@ -416,8 +416,8 @@ function showAreaMap(lat, lon, contour ,place){
     areamap = areamap;
   }
 
+  areamap.setView([lat, lon], 8, { zoom: {animation: true}});
 
-  areamap.setView([lat, lon],8, { zoom: {animation: true}});
   var tempC = contour.split("],[");
   var tempLat;
   var tempLon;
@@ -431,8 +431,11 @@ function showAreaMap(lat, lon, contour ,place){
     polyArray.push(temparray);
     // console.log(tempLat,tempLon);
   }
+
   // map.setView([(lat+this_lat)/2,(lon+this_lon)/2],11);
-  var layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
+  var layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+
+  });
   layer.addTo(areamap);
   // var m = L.marker([lat, lon], {draggable:true}).bindLabel('You', { noHide: true,className: "maplabel" })
   //     .addTo(map)

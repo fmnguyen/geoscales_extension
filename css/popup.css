@@ -3,8 +3,7 @@ body {
   width: 350px; }
 
 #location-atlas {
-  padding: 6px 20px 20px 20px;
-  border-bottom: 1px #A0A0A0 solid; }
+  padding: 6px 20px 20px 20px; }
 
 #previousAddress {
   cursor: pointer; }
