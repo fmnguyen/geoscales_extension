@@ -145,6 +145,7 @@
 	-ms-transition-property: opacity;
 	transition-property: opacity;
 }
+
 .tooltipster-fade-show {
 	opacity: 1;
 }

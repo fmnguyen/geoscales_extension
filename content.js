@@ -360,33 +360,27 @@ function create_tooltip() {
 
 function showDistanceMap(lat, lon, this_lat, this_lon,place,this_mult){
     if(distancemap == undefined) {
+      console.log('instantiating new map')
       distancemap = L.map('personalizedmap');
     }
     else {
       distancemap = distancemap;
     }
 
-    for(var i; i < layers.length; i++) {
-      distancemap.removeLayer(layers[i]);
-    }
-    layers = [];
-
-    console.log(layers);
+    console.log(distancemap);
+    console.log("lat: " + lat + ", lon: " + lon)
 
     distancemap.setView([(lat+this_lat)/2,(lon+this_lon)/2],11,{ zoom: {animation: true}});
     var layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
     layer.addTo(distancemap);
-    layers.push(layer);
 
     var m = L.marker([lat, lon], {draggable:true}).bindLabel('You', { noHide: true,className: "maplabel" })
         .addTo(distancemap)
         .showLabel();
-    layers.push(m);
 
     var m2 = L.marker([this_lat, this_lon], {draggable:true}).bindLabel(place, { noHide: true })
         .addTo(distancemap)
         .showLabel();
-    layers.push(m2);
     
     var polygon = L.polygon(
           [[lat,lon],[this_lat,this_lon]], {
@@ -396,9 +390,7 @@ function showDistanceMap(lat, lon, this_lat, this_lon,place,this_mult){
       "The distance between the two cities is  " + this_mult + " times longer than the distance between you and " + place, 
       { noHide: true })
         .addTo(distancemap);
-    layers.push(polygon);
 
-    console.log(layers)
     var group = new L.featureGroup([m, m2]);
 
     distancemap.fitBounds(group.getBounds().pad(1)); 
