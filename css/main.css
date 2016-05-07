@@ -23,20 +23,20 @@
 }
 
 #personalizedmap {
-  width: 326px;
-  height: 326px;
+  width: 280px;
+  height: 280px;
   /*border: 1px solid #d3d3d3;*/
   margin: 0;
   padding: 0;
 }
 
 #large {
-  width: 326px;
-  height: 326px;
+  width: 280px;
+  height: 280px;
 }
 
 #tootip_outer {
-  width: 326px;
+  width: 280px;
 }
 
 #exp {

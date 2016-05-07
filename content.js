@@ -274,8 +274,8 @@ function create_tooltip() {
     $(this).tooltipster({
       theme: 'tooltipster-noir',
       content: $("<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayDistance[key][2] + '</b> is about <b>' + mapArrayDistance[key][3] + '</b> times the distance of between <b>you</b> and <b>' + mapArrayDistance[key][1] + '</b> in <b> ' + mapArrayDistance[key][4] + ', ' + mapArrayDistance[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>"),
-      minWidth:340,
-      maxWidth:350,
+      minWidth:288,
+      maxWidth:310,
       'trigger':'click',
       functionReady: function(origin, tooltip) { 
         key = origin[0].id.split("-")[origin[0].id.split("-").length-1]; 
@@ -298,8 +298,8 @@ function create_tooltip() {
     $(this).tooltipster({
       theme: 'tooltipster-noir',
       content: $(tooltip_content_area),
-      minWidth:340,
-      maxWidth:350,
+      minWidth:288,
+      maxWidth:310,
       'trigger':'click',
       functionReady: function(origin, tooltip) { 
         key = origin[0].id.split("-")[origin[0].id.split("-").length-1]; 
@@ -329,8 +329,8 @@ function create_tooltip() {
     $(this).tooltipster({
       theme: 'tooltipster-noir',
       content: $(tooltip_content),
-      minWidth:340,
-      maxWidth:350,
+      minWidth:288,
+      maxWidth:310,
       'trigger':'click',
       functionReady: function(origin, tooltip) { 
         key=origin[0].id.split("-")[origin[0].id.split("-").length-1]; 
