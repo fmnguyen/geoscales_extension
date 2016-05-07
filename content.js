@@ -306,7 +306,7 @@ function create_tooltip() {
         showAreaMap(lat,lon,mapArrayArea[key][0][0],mapArrayArea[key][1]);
       },
       functionAfter: function(origin) {
-        areamap.remove()
+        areamap.remove(); console.log("functionafter in")
       }
     });
   });
