@@ -303,13 +303,15 @@ function create_tooltip() {
       content: $(tooltip_content_area),
       minWidth:288,
       maxWidth:310,
+      speed: 0,
       'trigger':'click',
       functionReady: function(origin, tooltip) { 
         key = origin[0].id.split("-")[origin[0].id.split("-").length-1]; 
         showAreaMap(lat,lon,mapArrayArea[key][0][0],mapArrayArea[key][1]);
       },
       functionAfter: function(origin) {
-        areamap.remove(); console.log("functionafter in")
+        areamap.remove(); 
+        areamap = undefined;
       }
     });
   });
@@ -334,6 +336,7 @@ function create_tooltip() {
       content: $(tooltip_content),
       minWidth:288,
       maxWidth:310,
+      speed: 0,
       'trigger':'click',
       functionReady: function(origin, tooltip) { 
         key=origin[0].id.split("-")[origin[0].id.split("-").length-1]; 
@@ -381,7 +384,7 @@ function showDistanceMap(lat, lon, this_lat, this_lon,place,this_mult){
     var m2 = L.marker([this_lat, this_lon], {draggable:true}).bindLabel(place, { noHide: true })
         .addTo(distancemap)
         .showLabel();
-    
+     
     var polygon = L.polygon(
           [[lat,lon],[this_lat,this_lon]], {
             color:'#736440'
@@ -398,12 +401,15 @@ function showDistanceMap(lat, lon, this_lat, this_lon,place,this_mult){
 
 
 function showAreaMap(lat, lon, contour ,place){
-  try {
+  
+  if(distancemap == undefined) {
+    console.log('instantiating new map')
     areamap = L.map('personalizedmap');
-  } catch (e) 
-  {
+  }
+  else {
     areamap = areamap;
   }
+
 
   areamap.setView([lat, lon],8, { zoom: {animation: true}});
   var tempC = contour.split("],[");
