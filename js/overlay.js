@@ -5,8 +5,8 @@
 
 // set up variables
 var 
-  largeWidth = 346,
-  largeHeight = 272;
+  largeWidth = 280,
+  largeHeight = 280;
 
 var margin = {
   top: 0

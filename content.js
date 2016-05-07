@@ -275,9 +275,9 @@ function create_tooltip() {
     key = this.id.split("-")[this.id.split("-").length-1];
     $(this).tooltipster({
       theme: 'tooltipster-noir',
-      content: $("<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayDistance[key][2] + '</b> is about <b>' + mapArrayDistance[key][3] + '</b> times the distance of between <b>you</b> and <b>' + mapArrayDistance[key][1] + '</b> in <b> ' + mapArrayDistance[key][4] + ', ' + mapArrayDistance[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>"),
-      minWidth:340,
-      maxWidth:350,
+      content: $("<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayDistance[key][2] + "</b> is about <br> <div class='mult-atlas'>" + mapArrayDistance[key][3] + ' times  </div>the distance of between <b>you</b> and <b>' + mapArrayDistance[key][1] + '</b> in <b> ' + mapArrayDistance[key][4] + ', ' + mapArrayDistance[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>"),
+      minWidth:288,
+      maxWidth:310,
       'trigger':'click',
       functionReady: function(origin, tooltip) { 
         key = origin[0].id.split("-")[origin[0].id.split("-").length-1]; 
@@ -296,22 +296,22 @@ function create_tooltip() {
   $.each($('.area-atlas'), function(i,d) {
     key = this.id.split("-")[this.id.split("-").length-1];
     if (mapArrayArea[key][4] != "NA") {
-      tooltip_content_area = "<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + '</b> is about ' + mapArrayArea[key][3] + ' times the size of <b>' + mapArrayArea[key][1] + '</b> in <b> ' + mapArrayArea[key][4] + ', ' + mapArrayArea[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>";
+      tooltip_content_area = "<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayArea[key][3] + ' times </div> the size of <b>' + mapArrayArea[key][1] + '</b> in <b> ' + mapArrayArea[key][4] + ', ' + mapArrayArea[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>";
     } else {
-      tooltip_content_area = "<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + '</b> is about ' + mapArrayArea[key][3] + ' times the size of <b>' + mapArrayArea[key][1] + ' state.' + "</div><br><div id='personalizedmap'></div></div>";
+      tooltip_content_area = "<div class='tootip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayArea[key][3] + ' times </div> the size of <b>' + mapArrayArea[key][1] + ' state.' + "</div><br><div id='personalizedmap'></div></div>";
     }
     $(this).tooltipster({
       theme: 'tooltipster-noir',
       content: $(tooltip_content_area),
-      minWidth:340,
-      maxWidth:350,
+      minWidth:288,
+      maxWidth:310,
       'trigger':'click',
       functionReady: function(origin, tooltip) { 
         key = origin[0].id.split("-")[origin[0].id.split("-").length-1]; 
         showAreaMap(lat,lon,mapArrayArea[key][0][0],mapArrayArea[key][1]);
       },
       functionAfter: function(origin) {
-        areamap.remove()
+        areamap.remove(); console.log("functionafter in")
       }
     });
   });
@@ -330,12 +330,12 @@ function create_tooltip() {
     topoid = mapArrayCountry[key][9];
     keyword = mapArrayCountry[key][10];
     this_mult = mapArrayCountry[key][11];
-    tooltip_content = "<div class='tootip_outer'><div id='exp'>"+'<b>'+ mapArrayCountry[key][8] + '</b> is about <b>' + mapArrayCountry[key][11] + '</b> times the size of your <b>' + mapArrayCountry[key][0]+ "</b></div><br><div id='large'></div></div>";
+    tooltip_content = "<div class='tootip_outer'><div id='exp'>"+'<b>'+ mapArrayCountry[key][8] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayCountry[key][11] + ' times </div> the size of your <b>' + mapArrayCountry[key][0]+ "</b></div><br><div id='large'></div></div>";
     $(this).tooltipster({
       theme: 'tooltipster-noir',
       content: $(tooltip_content),
-      minWidth:340,
-      maxWidth:350,
+      minWidth:288,
+      maxWidth:310,
       'trigger':'click',
       functionReady: function(origin, tooltip) { 
         key=origin[0].id.split("-")[origin[0].id.split("-").length-1]; 
@@ -438,8 +438,8 @@ function showAreaMap(lat, lon, contour ,place){
   areamap.fitBounds(group.getBounds()); 
 }
 
-var largeWidth = 326;
-var largeHeight = 326;
+var largeWidth = 280;
+var largeHeight = 280;
 var padding = 5;
 var transitionDuration = 800;
 var largeCanvasContext;
@@ -524,7 +524,7 @@ function drawfromarticle(matchObject, center_lat,center_lon, userarea, this_coun
       
       largeCanvasContext.clearRect(0, 0, largeWidth, largeHeight);
       largeCanvasContext.strokeStyle = "#333", largeCanvasContext.lineWidth = 1, largeCanvasContext.strokeRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
-      largeCanvasContext.fillStyle = "#b2d0d0", largeCanvasContext.fillRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
+      largeCanvasContext.fillStyle = "#d2e3e3", largeCanvasContext.fillRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
 
       largeCanvasContext.fillStyle = colors[0], largeCanvasContext.beginPath(), largeMapObjects[0].path(basemap), largeCanvasContext.fill();
       largeCanvasContext.strokeStyle = "black", largeCanvasContext.lineWidth = .5, largeCanvasContext.beginPath(), largeMapObjects[0].path(basemap), largeCanvasContext.stroke();
@@ -542,7 +542,7 @@ function drawfromarticle(matchObject, center_lat,center_lon, userarea, this_coun
       targetmap = topojson.merge(world, world.objects.counties.geometries.filter(function(d) { return targetid.has(d.id); }));
       largeCanvasContext.clearRect(0, 0, largeWidth, largeHeight);
       largeCanvasContext.strokeStyle = "#333", largeCanvasContext.lineWidth = 1, largeCanvasContext.strokeRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
-      largeCanvasContext.fillStyle = "#b2d0d0", largeCanvasContext.fillRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
+      largeCanvasContext.fillStyle = "#d2e3e3", largeCanvasContext.fillRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
 
       largeCanvasContext.fillStyle = colors[0], largeCanvasContext.beginPath(), largeMapObjects[0].path(basemap), largeCanvasContext.fill();
       largeCanvasContext.strokeStyle = "black", largeCanvasContext.lineWidth = .5, largeCanvasContext.beginPath(), largeMapObjects[0].path(basemap), largeCanvasContext.stroke();
@@ -589,7 +589,7 @@ function setUpLargeMaps(lat, lon, name) {
 var drawCanvasLarge = function() {
   largeCanvasContext.clearRect(0, 0, largeWidth, largeHeight);
   largeCanvasContext.strokeStyle = "#333", largeCanvasContext.lineWidth = 1, largeCanvasContext.strokeRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
-  largeCanvasContext.fillStyle = "#b2d0d0", largeCanvasContext.fillRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
+  largeCanvasContext.fillStyle = "#d2e3e3", largeCanvasContext.fillRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
 
   largeCanvasContext.fillStyle = colors[0], largeCanvasContext.beginPath(), largeMapObjects[0].path(basemap), largeCanvasContext.fill();
   largeCanvasContext.strokeStyle = "black", largeCanvasContext.lineWidth = .5, largeCanvasContext.beginPath(), largeMapObjects[0].path(basemap), largeCanvasContext.stroke();

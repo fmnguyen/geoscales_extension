@@ -1,49 +1,74 @@
 #loadingLayer-altas {
-  height: 100%;
-  width:100%;
-  background-color: white;
+  z-index: 99999999;
+  height: 100% !important;
+  width:100% !important;
+  background-color: white !important;
 }
 
 #loadingWheel-altas {
-  width: 40px;
+  z-index: 99999999;
+  width: 40px !important;
 }
 
-.leaflet-tile { 
-  z-index: 2;
-  left: 0px;
-  top: 0px;
+.leaflet-tile {
+z-index: 99999999; 
+  z-index: 2 !important;
+  left: 0px !important;
+  top: 0px !important;
 }
 
 /*highlight tag*/
 .measure-atlas {
-	background-color:#FFD500;
-  text-decoration: underline;
-  font-weight: bold;
-  cursor: pointer; 
+  z-index: 99999999;
+	background-color:#FFD500 !important;
+  text-decoration: underline !important;
+  font-weight: bold !important;
+  cursor: pointer !important; 
 }
 
 #personalizedmap {
-  width: 326px;
-  height: 326px;
-  /*border: 1px solid #d3d3d3;*/
-  margin: 0;
-  padding: 0;
+  z-index: 99999999;
+  width: 280px !important;
+  height: 280px !important;
+  /*border: 1px solid #d3d3d3 !important;*/
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 #large {
-  width: 326px;
-  height: 326px;
+  z-index: 99999999;
+  width: 280px !important;
+  height: 280px !important;
 }
 
 #tootip_outer {
-  width: 326px;
+  z-index: 99999999;
+  width: 280px !important;
 }
 
 #exp {
-  font-family: 'Raleway', "Arial", sans-serif;
+  z-index: 99999999;
+  font-family: 'Raleway', "Arial", sans-serif !important;
+  padding: 3px !important;
+  text-align: center !important;
 }
 
 .maplabel {
-	font: 10pt;
+  z-index: 99999999;
+	font: 10pt !important;
 }
 
+.mult-atlas {
+  z-index: 99999999;
+  background-color: #FFD500 !important;
+  width: 200px !important !important;
+  margin-top: 4px !important;
+  margin-bottom: 3px !important;
+  height: 22px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  border-radius: 8px !important;
+  padding: 1px !important;
+  font-weight: bold !important;
+
+}
