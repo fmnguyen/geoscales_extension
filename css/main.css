@@ -1,17 +1,14 @@
 #loadingLayer-altas {
-  z-index: 99999999;
   height: 100% !important;
   width:100% !important;
   background-color: white !important;
 }
 
 #loadingWheel-altas {
-  z-index: 99999999;
   width: 40px !important;
 }
 
 .leaflet-tile {
-z-index: 99999999; 
   z-index: 2 !important;
   left: 0px !important;
   top: 0px !important;
@@ -19,7 +16,6 @@ z-index: 99999999;
 
 /*highlight tag*/
 .measure-atlas {
-  z-index: 99999999;
 	background-color:#FFD500 !important;
   text-decoration: underline !important;
   font-weight: bold !important;
@@ -27,7 +23,6 @@ z-index: 99999999;
 }
 
 #personalizedmap {
-  z-index: 99999999;
   width: 280px !important;
   height: 280px !important;
   /*border: 1px solid #d3d3d3 !important;*/
@@ -36,30 +31,25 @@ z-index: 99999999;
 }
 
 #large {
-  z-index: 99999999;
   width: 280px !important;
   height: 280px !important;
 }
 
 #tootip_outer {
-  z-index: 99999999;
   width: 280px !important;
 }
 
 #exp {
-  z-index: 99999999;
   font-family: 'Raleway', "Arial", sans-serif !important;
   padding: 3px !important;
   text-align: center !important;
 }
 
 .maplabel {
-  z-index: 99999999;
 	font: 10pt !important;
 }
 
 .mult-atlas {
-  z-index: 99999999;
   background-color: #FFD500 !important;
   width: 200px !important !important;
   margin-top: 4px !important;

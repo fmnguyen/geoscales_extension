@@ -362,41 +362,47 @@ function create_tooltip() {
 
 
 function showDistanceMap(lat, lon, this_lat, this_lon,place,this_mult){
-    if(distancemap == undefined) {
-      console.log('instantiating new map')
-      distancemap = L.map('personalizedmap');
-    }
-    else {
-      distancemap = distancemap;
-    }
+  if(distancemap == undefined) {
+    console.log('instantiating new map')
+    distancemap = L.map('personalizedmap');
+  }
+  else {
+    distancemap = distancemap;
+  }
 
-    console.log(distancemap);
-    console.log("lat: " + lat + ", lon: " + lon)
+  console.log(distancemap);
+  console.log("lat: " + lat + ", lon: " + lon)
+  console.log("this_lat: " + this_lat + ", this_lon: " + this_lon)
 
-    distancemap.setView([(lat+this_lat)/2,(lon+this_lon)/2],11,{ zoom: {animation: true}});
-    var layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
-    layer.addTo(distancemap);
+  distancemap.setView(
+    [(lat + this_lat) / 2, (lon + this_lon) / 2], 
+    11, 
+    { zoom: {animation: true}});
+  
+  var layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
+  layer.addTo(distancemap);
 
-    var m = L.marker([lat, lon], {draggable:true}).bindLabel('You', { noHide: true,className: "maplabel" })
-        .addTo(distancemap)
-        .showLabel();
+  var m = L.marker([lat, lon], {draggable:true}).bindLabel('You', { noHide: true,className: "maplabel" })
+    .addTo(distancemap)
+    .showLabel();
 
-    var m2 = L.marker([this_lat, this_lon], {draggable:true}).bindLabel(place, { noHide: true })
-        .addTo(distancemap)
-        .showLabel();
-     
-    var polygon = L.polygon(
-          [[lat,lon],[this_lat,this_lon]], {
-            color:'#736440'
-          });
-    polygon.bindLabel(
-      "The distance between the two cities is  " + this_mult + " times longer than the distance between you and " + place, 
-      { noHide: true })
-        .addTo(distancemap);
+  var m2 = L.marker([this_lat, this_lon], {draggable:true}).bindLabel(place, { noHide: true })
+    .addTo(distancemap)
+    .showLabel();
+ 
+  var polygon = L.polygon(
+    [[lat,lon],[this_lat,this_lon]], {
+      color:'#736440'
+    });
 
-    var group = new L.featureGroup([m, m2]);
+  polygon.bindLabel(
+    "The distance between the two cities is  " + this_mult + " times longer than the distance between you and " + place, 
+    { noHide: true })
+    .addTo(distancemap);
 
-    distancemap.fitBounds(group.getBounds().pad(1)); 
+  var group = new L.featureGroup([m, m2]);
+
+  distancemap.fitBounds(group.getBounds().pad(1)); 
 }
 
 
