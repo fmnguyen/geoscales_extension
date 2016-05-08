@@ -25,7 +25,6 @@
     "scripts": ["js/jquery-2.2.3.js","js/jquery-ui.js", "background.js"],
     "persistent": false
   },
-  "options_page": "option.html", 
   "browser_action": {
       "default_title": "Altas of Me",
       "default_icon": "images/icon-inactive.png",

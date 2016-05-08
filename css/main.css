@@ -10,8 +10,6 @@
 
 .leaflet-tile {
   z-index: 2 !important;
-  left: 0px !important;
-  top: 0px !important;
 }
 
 /*highlight tag*/
@@ -60,5 +58,14 @@
   border-radius: 8px !important;
   padding: 1px !important;
   font-weight: bold !important;
+}
 
+.mult-atlas > .gs_multiplier_value {
+  font-family: 'Raleway', "Arial", sans-serif !important;
+}
+
+.gs_multiplier_text {
+  font-family: 'Raleway', "Arial", sans-serif !important;
+  font-size: 14px;
+  line-height: 19px;
 }

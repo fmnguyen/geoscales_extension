@@ -262,27 +262,35 @@ function highlight(article_content) {
     } //else end
   }); //doRequest end
 
-  // $('#loadingLayer-altas').css("background-color",rgba(255,255,255,0));
   console.log($('#loadingLayer-altas').remove())
   create_tooltip(); 
 } // highlight end
 
 
-
+/**
+ * Iterates through each of the tagged terms and creates a tooltip for each term (distance vs area)
+ */
 function create_tooltip() {
-  $('.measure-atlas').parent().removeAttr("href");
+
+  $('.measure-atlas').parent().removeAttr("href"); // removes click functionality from <a> tags for the sake of extension UX
+
+  /**
+   * Iterates through each distance tag $('.distance-atlas') and creates a tooltip for each
+   * Calls showDistanceMap() to instantiate a new Leaflet map for each tooltip
+   * After the tooltip is removed, removes the Leaflet map for the next tooltip and re-assign it
+   */
   $.each($('.distance-atlas'), function(i,d) {
     key = this.id.split("-")[this.id.split("-").length-1];
     $(this).tooltipster({
       theme: 'tooltipster-noir',
-      content: $("<div class='tooltip_outer'><div id='exp'>" + '<b>'+ mapArrayDistance[key][2] + "</b> is about <br> <div class='mult-atlas'>" + mapArrayDistance[key][3] + ' times  </div>the distance of between <b>you</b> and <b>' + mapArrayDistance[key][1] + '</b> in <b> ' + mapArrayDistance[key][4] + ', ' + mapArrayDistance[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>"),
+      content: $("<div class='tooltip_outer'><div id='exp'>" + '<b>'+ mapArrayDistance[key][2] + "</b> is about <br> <div class='mult-atlas'><p class='gs_multiplier_value'>" + mapArrayDistance[key][3] + " times</p></div><p class='gs_multiplier_text'>the distance of between <b>you</b> and <b>" + mapArrayDistance[key][1] + '</b> in <b> ' + mapArrayDistance[key][4] + ', ' + mapArrayDistance[key][5] + '</b></p>'+"</div><div id='personalizedmap'></div></div>"),
       minWidth:288,
       maxWidth:310,
-      speed: 0,
+      speed: 0, // has to stay 0 so that the animation between two maps doesn't break things
       'trigger':'click',
       functionReady: function(origin, tooltip) { 
         key = origin[0].id.split("-")[origin[0].id.split("-").length-1]; 
-        showDistanceMap(lat, lon, mapArrayDistance[key][0][0], mapArrayDistance[key][0][1],mapArrayDistance[key][1],mapArrayDistance[key][3])
+        showDistanceMap(lat, lon, mapArrayDistance[key][0][0], mapArrayDistance[key][0][1], mapArrayDistance[key][1], mapArrayDistance[key][3]) // appends to $('#personalizedmap') inside of $('.tooltip_outer')
       },
       functionAfter: function(origin) {
         distancemap.remove();
@@ -291,19 +299,24 @@ function create_tooltip() {
     });
   });
 
+  /**
+   * Iterates through each area tag $('.area-atlas') and creates a tooltip for each
+   * Calls showAreaMap() to instantiate a new Leaflet map for each area tooltip
+   * After the tooltip is removed, removes the Leaflet map for the next tooltip and re-assign it
+   */
   $.each($('.area-atlas'), function(i,d) {
     key = this.id.split("-")[this.id.split("-").length-1];
     if (mapArrayArea[key][4] != "NA") {
-      tooltip_content_area = "<div class='tooltip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayArea[key][3] + ' times </div> the size of <b>' + mapArrayArea[key][1] + '</b> in <b> ' + mapArrayArea[key][4] + ', ' + mapArrayArea[key][5] + '</b>'+"</div><br><div id='personalizedmap'></div></div>";
+      tooltip_content_area = "<div class='tooltip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayArea[key][3] + ' times </div> the size of <b>' + mapArrayArea[key][1] + '</b> in <b> ' + mapArrayArea[key][4] + ', ' + mapArrayArea[key][5] + '</b>'+"</div><div id='personalizedmap'></div></div>";
     } else {
-      tooltip_content_area = "<div class='tooltip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayArea[key][3] + ' times </div> the size of <b>' + mapArrayArea[key][1] + ' state.' + "</div><br><div id='personalizedmap'></div></div>";
+      tooltip_content_area = "<div class='tooltip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayArea[key][3] + ' times </div> the size of <b>' + mapArrayArea[key][1] + ' state.' + "</div><div id='personalizedmap'></div></div>";
     }
     $(this).tooltipster({
       theme: 'tooltipster-noir',
       content: $(tooltip_content_area),
       minWidth:288,
       maxWidth:310,
-      speed: 0,
+      speed: 0, // has to stay 0 so that the animation between two maps doesn't break things
       'trigger':'click',
       functionReady: function(origin, tooltip) { 
         key = origin[0].id.split("-")[origin[0].id.split("-").length-1]; 
@@ -316,7 +329,11 @@ function create_tooltip() {
     });
   });
 
-
+  /**
+   * Iterates through each area tag $('.country-atlas') and creates a tooltip for each
+   * Instantiates each map with topojson and zooms according to the scales of each country
+   * After the tooltip is removed, forces the d3.map to empty() itself to reset
+   */
   $.each($('.country-atlas'), function(i,d) {
     key = this.id.split("-")[this.id.split("-").length-1];
     matchObject = mapArrayCountry[key][0];
@@ -330,7 +347,7 @@ function create_tooltip() {
     topoid = mapArrayCountry[key][9];
     keyword = mapArrayCountry[key][10];
     this_mult = mapArrayCountry[key][11];
-    tooltip_content = "<div class='tooltip_outer'><div id='exp'>"+'<b>'+ mapArrayCountry[key][8] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayCountry[key][11] + ' times </div> the size of your <b>' + mapArrayCountry[key][0]+ "</b></div><br><div id='large'></div></div>";
+    tooltip_content = "<div class='tooltip_outer'><div id='exp'>"+'<b>'+ mapArrayCountry[key][8] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayCountry[key][11] + ' times </div> the size of your <b>' + mapArrayCountry[key][0]+ "</b></div><div id='large'></div></div>";
     $(this).tooltipster({
       theme: 'tooltipster-noir',
       content: $(tooltip_content),
@@ -355,37 +372,49 @@ function create_tooltip() {
       }
      });
   });
+
+  // After the tooltips have been created, let the extension know that the process has finished to change the icon to active
   chrome.runtime.sendMessage( { tabAction: "completeHighlight" });
 } //create_tooltip end
 
 
-function showDistanceMap(lat, lon, this_lat, this_lon,place,this_mult){
+/**
+ * Instantiates a new Leaflet map, and adds the markers for positions, the distance between the two markers,
+ *   and the layer representing the map on top. Gets called AFTER the tooltip has been created (onReady) and is visible in the DOM
+ * @param  {[int]} lat       The submitted/saved latitude
+ * @param  {[int]} lon       The submitted/saved longitude
+ * @param  {[int]} this_lat  The analogous latitude
+ * @param  {[int]} this_lon  The analogous latitude
+ * @param  {[string]} place  The name of the analgous location
+ * @param  {[int]} this_mult The scale of how far/short the distance between the places is
+ */
+function showDistanceMap(lat, lon, this_lat, this_lon, place, this_mult){
   if(distancemap == undefined) {
-    console.log('instantiating new map')
     distancemap = L.map('personalizedmap');
   }
   else {
     distancemap = distancemap;
   }
 
-  console.log(distancemap);
-  console.log("lat: " + lat + ", lon: " + lon)
-  console.log("this_lat: " + this_lat + ", this_lon: " + this_lon)
-
+  // set the view of the map to the average lat/lon of the two distances
   distancemap.setView(
     [(lat + this_lat) / 2, (lon + this_lon) / 2], 
-    8, 
-    { zoom: {animate: true}});
+    2, 
+    { 
+      zoom: {
+        animate: true
+      }
+    });
   
-  var layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    
-  });
+  var layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png'); //sets the layer that we need to show
   layer.addTo(distancemap);
 
+  // The first marker, set to your original location for lat/lon
   var m = L.marker([lat, lon], {draggable:true}).bindLabel('You', { noHide: true,className: "maplabel" })
     .addTo(distancemap)
     .showLabel();
 
+  // The second marker, set to the destination location for lat/lon
   var m2 = L.marker([this_lat, this_lon], {draggable:true}).bindLabel(place, { noHide: true })
     .addTo(distancemap)
     .showLabel();
@@ -401,22 +430,33 @@ function showDistanceMap(lat, lon, this_lat, this_lon,place,this_mult){
     .addTo(distancemap);
 
   var group = new L.featureGroup([m, m2]);
-
-  distancemap.fitBounds(group.getBounds().pad(1)); 
+  distancemap.fitBounds(group.getBounds().pad(0.5));  // fits the distancemap between the two markers 
 }
 
-
+/**
+ * [showAreaMap description]
+ * @param  {[int]} lat        The submitted/saved latitude
+ * @param  {[int]} lon        The submitted/saved longitude
+ * @param  {[string]} contour String representing points of a polygon that bounds the place named
+ * @param  {[string]} place   The name of the analgous location
+ */
 function showAreaMap(lat, lon, contour, place){
-  
   if(distancemap == undefined) {
-    console.log('instantiating new map')
     areamap = L.map('personalizedmap');
   }
   else {
     areamap = areamap;
   }
 
-  areamap.setView([lat, lon], 8, { zoom: {animation: true}});
+  areamap.setView(
+    [lat, lon], 
+    8, 
+    { 
+      zoom: 
+      {
+        animate: true
+      }
+    });
 
   var tempC = contour.split("],[");
   var tempLat;
@@ -429,17 +469,10 @@ function showAreaMap(lat, lon, contour, place){
     tempLon = parseFloat(latlon[1]);
     var temparray = [tempLat,tempLon];
     polyArray.push(temparray);
-    // console.log(tempLat,tempLon);
   }
 
-  // map.setView([(lat+this_lat)/2,(lon+this_lon)/2],11);
-  var layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-
-  });
+  var layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png');
   layer.addTo(areamap);
-  // var m = L.marker([lat, lon], {draggable:true}).bindLabel('You', { noHide: true,className: "maplabel" })
-  //     .addTo(map)
-  //     .showLabel();
   var polygon = L.polygon(
         [polyArray], {
           color:'red', weight:'1px'

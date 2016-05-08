@@ -17,7 +17,7 @@ chrome.runtime.onMessage.addListener( function(message, sender, sendResponse) {
     if(env_variable === 'prod') // keep extension open in dev mode
       window.close(); 
   } else if (message.startContent) {
-    submitAddress(message);
+    //submitAddress(message);
   }
 });
 
