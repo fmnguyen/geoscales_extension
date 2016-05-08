@@ -84,7 +84,8 @@ function highlight(article_content) {
   myind = 0;
   content = article_content;
   //convert expressions 3 million to numeric equivalent so that if they are distance or area they get tagged
-  var myRegexpMega = /[\s]*([1-9][0-9]{0,2})[\s-]*(?:billion|million|thousand|trillion)[\s]*/g;   
+  //var myRegexpMega = /[\s]*([1-9][0-9]{0,2})[\s-]*(?:billion|million|thousand|trillion)[\s]*/g;   
+  var myRegexpMega = /([1-9](?:\d{0,2})(?:,\d{3})*(?:\.\d*[1-9])?|0?\.\d*[1-9]|0)[\s-]*(?:billion|million|thousand|trillion)[\s]*/gi;
   var myRegexThous = /thousand/;
   var myRegexMil = /million/;
   var myRegexBil = /billion/;
@@ -98,18 +99,28 @@ function highlight(article_content) {
     var matchMil = myRegexMil.exec(bilmatches[i][0]);
     var matchBil = myRegexBil.exec(bilmatches[i][0]);
     var matchTril = myRegexTril.exec(bilmatches[i][0]);
+    var newbig = "";
 
-    if(matchThous!=null) {
-      content= content.replace(mre, " "+bilmatches[i][1]+",000 ");
+    if(mbatchThous!=null) {
+      newbig = bilmatches[i][1]*1000;
+      content= content.replace(mre, " "+newbig+" ");
+      content= content.replace(mre, " "+newbig+" ");
+      //content= content.replace(mre, " "+bilmatches[i][1]+",000 ");
     }
     if(matchMil!=null) {
-      content= content.replace(mre, " "+bilmatches[i][1]+",000,000 ");
+      newbig = bilmatches[i][1]*1000000;
+      content= content.replace(mre, " "+newbig+" ");
+      //content= content.replace(mre, " "+bilmatches[i][1]+",000,000 ");
     }
     if(matchBil!=null) {
-      content= content.replace(mre, " "+bilmatches[i][1]+",000,000,000 ");
+      newbig = bilmatches[i][1]*1000000;
+      content= content.replace(mre, " "+newbig+" ");
+      //content= content.replace(mre, " "+bilmatches[i][1]+",000,000,000 ");
     }
     if(matchTril!=null) {
-      content= content.replace(mre, " "+bilmatches[i][1]+",000,000,000,000 ");
+      newbig = bilmatches[i][1]*1000000000000;
+      content= content.replace(mre, " "+newbig+" ");
+      //content= content.replace(mre, " "+bilmatches[i][1]+",000,000,000,000 ");
     }
   }
 
