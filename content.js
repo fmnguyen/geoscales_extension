@@ -146,8 +146,8 @@ function highlight(article_content) {
 
     
   sendToApi = {locationObj,countryMatchOjb,areaMatchOjb,distanceMatchOjb,stateOjb}
-	//var urimerge = "http://visualization.ischool.uw.edu:5000/todo/api/v1.0/merge/";
-  var urimerge = "http://flask-env.82nggiyg3i.us-west-2.elasticbeanstalk.com/todo/api/v1.0/merge/";
+	var urimerge = "http://visualization.ischool.uw.edu:5000/todo/api/v1.0/merge/";
+  //var urimerge = "http://flask-env.82nggiyg3i.us-west-2.elasticbeanstalk.com/todo/api/v1.0/merge/";
 
 	doRequest(urimerge, JSON.stringify(sendToApi), function(err, response) { 
     if (err) {
@@ -307,9 +307,9 @@ function create_tooltip() {
   $.each($('.area-atlas'), function(i,d) {
     key = this.id.split("-")[this.id.split("-").length-1];
     if (mapArrayArea[key][4] != "NA") {
-      tooltip_content_area = "<div class='tooltip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayArea[key][3] + ' times </div> the size of <b>' + mapArrayArea[key][1] + '</b> in <b> ' + mapArrayArea[key][4] + ', ' + mapArrayArea[key][5] + '</b>'+"</div><div id='personalizedmap'></div></div>";
+      tooltip_content_area = "<div class='tooltip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + "</b> is about <br> <div class='mult-atlas'><p class='gs_multiplier_value'>" + mapArrayArea[key][3] + ' times</p></div><p class="gs_multiplier_text"> the size of <b>' + mapArrayArea[key][1] + '</b> in <b> ' + mapArrayArea[key][4] + ', ' + mapArrayArea[key][5] + '</b></p>'+"</div><div id='personalizedmap'></div></div>";
     } else {
-      tooltip_content_area = "<div class='tooltip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayArea[key][3] + ' times </div> the size of <b>' + mapArrayArea[key][1] + ' state.' + "</div><div id='personalizedmap'></div></div>";
+      tooltip_content_area = "<div class='tooltip_outer'><div id='exp'>"+'<b>'+mapArrayArea[key][2] + "</b> is about <br> <div class='mult-atlas'><p class='gs_multiplier_value'>" + mapArrayArea[key][3] + ' times</p></div><p class="gs_multiplier_text"> the size of <b>' + mapArrayArea[key][1] + ' state.' + "</p></div><div id='personalizedmap'></div></div>";
     }
     $(this).tooltipster({
       theme: 'tooltipster-noir',
@@ -347,7 +347,7 @@ function create_tooltip() {
     topoid = mapArrayCountry[key][9];
     keyword = mapArrayCountry[key][10];
     this_mult = mapArrayCountry[key][11];
-    tooltip_content = "<div class='tooltip_outer'><div id='exp'>"+'<b>'+ mapArrayCountry[key][8] + "</b> is about <br> <div class='mult-atlas'> " + mapArrayCountry[key][11] + ' times </div> the size of your <b>' + mapArrayCountry[key][0]+ "</b></div><div id='large'></div></div>";
+    tooltip_content = "<div class='tooltip_outer'><div id='exp'>"+'<b>'+ mapArrayCountry[key][8] + "</b> is about <br> <div class='mult-atlas'><p class='gs_multiplier_value'>" + mapArrayCountry[key][11] + ' times</p></div><p class="gs_multiplier_text">the size of your <b>' + mapArrayCountry[key][0]+ "</b></p></div><div id='large'></div></div>";
     $(this).tooltipster({
       theme: 'tooltipster-noir',
       content: $(tooltip_content),
@@ -435,10 +435,10 @@ function showDistanceMap(lat, lon, this_lat, this_lon, place, this_mult){
 
 /**
  * [showAreaMap description]
- * @param  {[int]} lat        The submitted/saved latitude
- * @param  {[int]} lon        The submitted/saved longitude
- * @param  {[string]} contour String representing points of a polygon that bounds the place named
- * @param  {[string]} place   The name of the analgous location
+ * @param  {int} lat        The submitted/saved latitude
+ * @param  {int} lon        The submitted/saved longitude
+ * @param  {string} contour String representing points of a polygon that bounds the place named
+ * @param  {sstring} place   The name of the analgous location
  */
 function showAreaMap(lat, lon, contour, place){
   if(distancemap == undefined) {

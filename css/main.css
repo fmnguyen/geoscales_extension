@@ -24,7 +24,7 @@
   width: 280px !important;
   height: 280px !important;
   /*border: 1px solid #d3d3d3 !important;*/
-  margin: 0 !important;
+  margin: 0 auto!important;
   padding: 0 !important;
 }
 
@@ -39,8 +39,9 @@
 
 #exp {
   font-family: 'Raleway', "Arial", sans-serif !important;
-  padding: 3px !important;
+  padding: 3px;
   text-align: center !important;
+  margin-bottom: 5px;
 }
 
 .maplabel {
@@ -49,23 +50,33 @@
 
 .mult-atlas {
   background-color: #FFD500 !important;
-  width: 200px !important !important;
-  margin-top: 4px !important;
-  margin-bottom: 3px !important;
-  height: 22px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  border-radius: 8px !important;
-  padding: 1px !important;
+  width: 200px !important;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 22px;
+  border-radius: 8px ;
+  padding: 1px;
   font-weight: bold !important;
+}
+
+.mult-atlas {
+
 }
 
 .mult-atlas > .gs_multiplier_value {
   font-family: 'Raleway', "Arial", sans-serif !important;
+  line-height: 22px;
+  font-weight: 700;
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
 }
 
 .gs_multiplier_text {
   font-family: 'Raleway', "Arial", sans-serif !important;
   font-size: 14px;
-  line-height: 19px;
+  line-height: 17px;
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
 }
