@@ -101,7 +101,7 @@ function highlight(article_content) {
     var matchTril = myRegexTril.exec(bilmatches[i][0]);
     var newbig = "";
 
-    if(mbatchThous!=null) {
+    if(matchThous!=null) {
       newbig = bilmatches[i][1]*1000;
       content= content.replace(mre, " "+newbig+" ");
       content= content.replace(mre, " "+newbig+" ");
