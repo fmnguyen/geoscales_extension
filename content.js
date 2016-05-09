@@ -158,9 +158,9 @@ function highlight(article_content) {
   for(var key in countryMatchOjb) resultCountry[key]=countryMatchOjb[key];
 
     
-  sendToApi = {locationObj,countryMatchOjb,areaMatchOjb,distanceMatchOjb,stateOjb}
-	var urimerge = "http://visualization.ischool.uw.edu:5000/todo/api/v1.0/merge/";
-  //var urimerge = "http://flask-env.82nggiyg3i.us-west-2.elasticbeanstalk.com/todo/api/v1.0/merge/";
+  sendToApi = {locationObj, countryMatchOjb, areaMatchOjb, distanceMatchOjb, stateOjb}
+	//var urimerge = "http://visualization.ischool.uw.edu:5000/todo/api/v1.0/merge/";
+  var urimerge = "http://flask-env.82nggiyg3i.us-west-2.elasticbeanstalk.com/todo/api/v1.0/merge/";
 
 	doRequest(urimerge, JSON.stringify(sendToApi), function(err, response) { 
     if (err) {
@@ -211,6 +211,7 @@ function highlight(article_content) {
     	areaResult = responseArray["result"]["area"]
     	distanceResult = responseArray["result"]["distance"]
     	var myindCountry = 0;
+
       $.each(countryResult, function(key, value) {
         var countryName = key;
         countrylist.push(countryName);
@@ -230,6 +231,7 @@ function highlight(article_content) {
         myind += 1;
         myindCountry += 1;
       });
+
       console.log("mapArrayCountry",mapArrayCountry);
 
       var myindArea = 0;
@@ -241,15 +243,12 @@ function highlight(article_content) {
         object_city = areaResult[i][0][6];
         object_state = areaResult[i][0][7];
         mapArrayArea[myindArea] = [polygon, matchObject,matchKeyword,matchMult, object_city, object_state];
-        // final_content = final_content.replaceAll(" " +matchKeyword + " ",' <span class="measure area" id="m'+myindArea.toString() + '">' + matchKeyword + " " +"</span>");
-        // final_content = final_content.replaceAll(" " +matchKeyword, " <span class='measure-atlas'>" + matchKeyword + '</span> [<b>'+matchKeyword + '</b> is about ' + String(Math.round(parseFloat(matchMult)*1000)/1000) + ' times bigger than ' +  matchObject + '</b> in <b> ' + object_city + ', ' + object_state + '</b>] ');
         final_content = final_content.replaceAll(" " +matchKeyword," <span class='measure-atlas area-atlas' id='my-tooltip-area-"+myindArea+"\'>" +matchKeyword+'</span>');
         myind += 1;
         myindArea += 1;
       }
       console.log("mapArrayArea",mapArrayArea);
 
-      // final.append([keyword, name, dist, mult,this_coord,this_city,mystate])
       var myindDistance = 0;
       for (var i = 0; i < distanceResult.length; i++) {
         matchKeyword = distanceResult[i][0][0];
@@ -260,10 +259,6 @@ function highlight(article_content) {
         object_state = distanceResult[i][0][6];
         mapArrayDistance[myindDistance] = [this_coord,matchObject,matchKeyword,matchMult,object_city, object_state];
         console.log("distancematchkeyword:",matchKeyword);
-        // final_content = final_content.replaceAll(" " +matchKeyword + " ",' <span class="measure distance" id="m'+myindDistance.toString() + '"><a href="#/" data-toggle="tooltip" title="' + matchKeyword + ' is ' + String(Math.round(parseFloat(matchMult)*1000)/1000) + ' times longer than the distance between you and ' + matchObject + '">'+" " + matchKeyword + " " +"</span></a>");
-        // tootip_content = '<a href="#/" data-toggle="tooltip" title="<img src="http:\/\/pix.epodunk.com/locatorMaps/wa/WA_24992.gif">"' + matchKeyword + " " +"</span></a>"
-        // final_content = final_content.replaceAll(" " +matchKeyword + " ",' <span class="measure distance" id="m'+myindDistance.toString() + '">");
-        // final_content = final_content.replaceAll(" " +matchKeyword," <span class='measure-atlas' id='my-tooltip'>" +matchKeyword+'</span> [<b>'+matchKeyword + '</b> is about ' + String(Math.round(parseFloat(matchMult)*1000)/1000) + ' times longer than the distance between <b>you</b> and <b>' + matchObject + '</b> in <b> ' + object_city + ', ' + object_state + '</b>] '); //  previous version with injected text 
         final_content = final_content.replaceAll(" " +matchKeyword," <span class='measure-atlas distance-atlas' id='my-tooltip-distance-"+myindDistance+"\'>" +matchKeyword+'</span>');
         myind += 1;
         myindDistance += 1;
@@ -286,7 +281,6 @@ function highlight(article_content) {
 function create_tooltip() {
 
   $('.measure-atlas').parent().removeAttr("href"); // removes click functionality from <a> tags for the sake of extension UX
-
   /**
    * Iterates through each distance tag $('.distance-atlas') and creates a tooltip for each
    * Calls showDistanceMap() to instantiate a new Leaflet map for each tooltip
@@ -370,14 +364,17 @@ function create_tooltip() {
       'trigger':'click',
       functionReady: function(origin, tooltip) { 
         key=origin[0].id.split("-")[origin[0].id.split("-").length-1]; 
-        drawfromarticle(mapArrayCountry[key][0], 
-          parseFloat(mapArrayCountry[key][1]) ,
+        drawfromarticle(
+          mapArrayCountry[key][0], 
+          parseFloat(mapArrayCountry[key][1]),
           parseFloat(mapArrayCountry[key][2]), 
           mapArrayCountry[key][3], 
           parseFloat(mapArrayCountry[key][4]), 
           parseFloat(mapArrayCountry[key][5]), 
-          mapArrayCountry[key][6], 100, 
-          mapArrayCountry[key][9],'') 
+          mapArrayCountry[key][6], 
+          100, 
+          mapArrayCountry[key][9],
+          '') 
       },
       // functionReady: function(origin, tooltip) { console.log(); drawfromarticle(key) },
       functionAfter: function(origin) { 
@@ -394,14 +391,14 @@ function create_tooltip() {
 /**
  * Instantiates a new Leaflet map, and adds the markers for positions, the distance between the two markers,
  *   and the layer representing the map on top. Gets called AFTER the tooltip has been created (onReady) and is visible in the DOM
- * @param  {[int]} lat       The submitted/saved latitude
- * @param  {[int]} lon       The submitted/saved longitude
- * @param  {[int]} this_lat  The analogous latitude
- * @param  {[int]} this_lon  The analogous latitude
- * @param  {[string]} place  The name of the analgous location
- * @param  {[int]} this_mult The scale of how far/short the distance between the places is
+ * @param  {int} lat       The submitted/saved latitude
+ * @param  {int} lon       The submitted/saved longitude
+ * @param  {int} this_lat  The analogous latitude
+ * @param  {int} this_lon  The analogous latitude
+ * @param  {string} place  The name of the analgous location
+ * @param  {int} this_mult The scale of how far/short the distance between the places is
  */
-function showDistanceMap(lat, lon, this_lat, this_lon, place, this_mult){
+function showDistanceMap(lat, lon, this_lat, this_lon, place, this_mult) {
   if(distancemap == undefined) {
     distancemap = L.map('personalizedmap');
   }
@@ -451,9 +448,9 @@ function showDistanceMap(lat, lon, this_lat, this_lon, place, this_mult){
  * @param  {int} lat        The submitted/saved latitude
  * @param  {int} lon        The submitted/saved longitude
  * @param  {string} contour String representing points of a polygon that bounds the place named
- * @param  {sstring} place   The name of the analgous location
+ * @param  {string} place   The name of the analgous location
  */
-function showAreaMap(lat, lon, contour, place){
+function showAreaMap(lat, lon, contour, place) {
   if(distancemap == undefined) {
     areamap = L.map('personalizedmap');
   }
@@ -467,7 +464,7 @@ function showAreaMap(lat, lon, contour, place){
     { 
       zoom: 
       {
-        animate: true
+        animate: false,
       }
     });
 
@@ -512,15 +509,13 @@ var basemap;
 var targetmap;
 var baseid;
 var targetid;
-var zoomToBoxScale = d3.scale.log().domain([17098242, 50]).range([100,600]);
+var zoomToBoxScale = d3.scale.log().domain([17098242, 50]).range([100, 600]);
 // land colors
 var colors = ["#EEEAE2", "#FFD300"]
 
 
 // define state, with default values
 var state = {
-  scale: 700,
-  area : 500000,
   latLon: [{
     lat: 6.52865,
     lon: 20.3586336
@@ -530,67 +525,84 @@ var state = {
   }]
 }
 
-function drawfromarticle(matchObject, center_lat,center_lon, userarea, this_country_lat, this_country_lon, this_country_area, scale,topoid,topoidState) {
-  var zoomRange = [100, 800]
+function drawfromarticle(matchObject, center_lat, center_lon, userarea, this_country_lat, this_country_lon, this_country_area, scale, topoid, topoidState) {
+
   // define canvas object and context for large canvas
   $('#large').empty();
+
   largeCanvasObj = d3.select("#large").append("canvas")
     .attr("width", largeWidth)
     .attr("height", largeHeight)
 
-  largeCanvasContext = largeCanvasObj.node().getContext("2d")
-  largeCanvasContext.globalAlpha = .9
-
-  // var graticule = d3.geo.graticule()()
+  largeCanvasContext = largeCanvasObj.node().getContext("2d");
+  largeCanvasContext.globalAlpha = .9;
 
   // set up ranges/scales
-
-  for (var i = 0; i < 2; i++) {
-    largeMapObjects[i] = setUpLargeMaps(state.latLon[i].lat, state.latLon[i].lon, i)
-  }
-
-  topoidState = 53073;
-  console.log(matchObject, center_lat,center_lon, userarea, this_country_lat, this_country_lon, this_country_area, scale);
   state.latLon[0] = {
     lat: center_lat,
     lon: center_lon
   }
-
   state.latLon[1] = {
     lat: this_country_lat,
     lon: this_country_lon
   }
 
+  // determines how much to scale and zoom in our maps
+  switch (matchObject) {
+    case 'city':
+      zoomToBoxScale.range([1500, 2500]);
+      break;
+    case 'state':
+      zoomToBoxScale.range([50, 500]);
+      break;
+    case 'country':
+      zoomToBoxScale.range([100, 300]);
+      break;
+    default:
+      console.log('Error in switch: ' + matchObject + ' not expected value'); 
+  }
+
+  numberSort = function (a,b) {
+    return a - b;
+  };
+  var areas = [userarea, this_country_area];
+  areas.sort(numberSort).reverse(); // this puts our areas in reverse order
+  areas[1] = areas[1];
+
+  for (var i = 0; i < 2; i++) {
+    largeMapObjects[i] = setUpLargeMaps(state.latLon[i].lat, state.latLon[i].lon, i, areas[i]);
+  }
+
+  topoidState = 53073;
+  console.log( matchObject)
+  console.log( center_lat, center_lon, userarea, this_country_lat, this_country_lon, this_country_area, scale);
+
+
   if (topoid != '') {
+
+    // Gets us.json and draws the states onto the US object on the world map
     d3.json(chrome.extension.getURL("topofile/us.json"), function(error, world) {
-      stateborder = topojson.feature(world, world.objects.states);  
+      stateborder = topojson.feature(world, world.objects.states);  // draws the US states
     });
 
     d3.json(chrome.extension.getURL("topofile/world-110m.json"), function(error, world) {
       // land = topojson.feature(world, world.objects.land);
       // borders = topojson.mesh(world, world.objects.countries);
-      baseid = d3.set([840]);
+
+      baseid = d3.set([840]); // this is the default topojson id for the United States
+
       if (topoid == 156) {
-        baseid = d3.set([643]);
+        baseid = d3.set([643]); 
       }
-      console.log(topoid);
+
       targetid = d3.set([topoid]);
-      console.log(baseid,targetid);
+
       basemap = topojson.merge(world, world.objects.countries.geometries.filter(function(d) { return baseid.has(d.id); }));
       targetmap = topojson.merge(world, world.objects.countries.geometries.filter(function(d) { return targetid.has(d.id); }));
-      
-      largeCanvasContext.clearRect(0, 0, largeWidth, largeHeight);
-      largeCanvasContext.strokeStyle = "#333", largeCanvasContext.lineWidth = 1, largeCanvasContext.strokeRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
-      largeCanvasContext.fillStyle = "#d2e3e3", largeCanvasContext.fillRect(2 * padding, 2 * padding, largeWidth - 4 * padding, largeHeight - 4 * padding);
-
-      largeCanvasContext.fillStyle = colors[0], largeCanvasContext.beginPath(), largeMapObjects[0].path(basemap), largeCanvasContext.fill();
-      largeCanvasContext.strokeStyle = "black", largeCanvasContext.lineWidth = .5, largeCanvasContext.beginPath(), largeMapObjects[0].path(basemap), largeCanvasContext.stroke();
-      largeCanvasContext.fillStyle = colors[1], largeCanvasContext.beginPath(), largeMapObjects[1].path(targetmap), largeCanvasContext.fill();
-      largeCanvasContext.strokeStyle = "#4C3100", largeCanvasContext.lineWidth = .5, largeCanvasContext.beginPath(), largeMapObjects[1].path(targetmap), largeCanvasContext.stroke();
-      largeCanvasContext.strokeStyle = "gray", largeCanvasContext.lineWidth = .5, largeCanvasContext.beginPath(), largeMapObjects[0].path(stateborder), largeCanvasContext.stroke();
     });
 
   } else {
+    console.log('entered else')
     d3.json("us.json", function(error, world) {
       baseid = d3.set([840]);
       console.log(topoidState);
@@ -606,21 +618,15 @@ function drawfromarticle(matchObject, center_lat,center_lon, userarea, this_coun
       largeCanvasContext.fillStyle = colors[1], largeCanvasContext.beginPath(), largeMapObjects[1].path(targetmap), largeCanvasContext.fill();
       largeCanvasContext.strokeStyle = "#4C3100", largeCanvasContext.lineWidth = .5, largeCanvasContext.beginPath(), largeMapObjects[1].path(targetmap), largeCanvasContext.stroke();
       largeCanvasContext.strokeStyle = "gray", largeCanvasContext.lineWidth = .5, largeCanvasContext.beginPath(), largeMapObjects[0].path(stateborder), largeCanvasContext.stroke();
-      })
+    });
   }
-
-  state.scale = this_country_area;
   rotateAndScale()
-  updateHash()
 }
 
-
-
-function setUpLargeMaps(lat, lon, name) {
+function setUpLargeMaps(lat, lon, name, scale) {
   var projectionLarge = d3.geo.azimuthalEqualArea()
     .translate([largeWidth / 2, largeHeight / 2])
-    // .scale(state.scale)
-    .scale(state.scale)
+    .scale(zoomToBoxScale(scale))
     .center([0, 0])
     .clipAngle(180 - 1e-3)
     .clipExtent([
@@ -633,8 +639,6 @@ function setUpLargeMaps(lat, lon, name) {
   var path = d3.geo.path()
     .projection(projectionLarge)
     .context(largeCanvasContext);
-
-  largeCanvasObj.call(dragSetupLarge())
 
   return {
     "projection": projectionLarge,
@@ -655,8 +659,6 @@ var drawCanvasLarge = function() {
   largeCanvasContext.strokeStyle = "gray", largeCanvasContext.lineWidth = .5, largeCanvasContext.beginPath(), largeMapObjects[0].path(stateborder), largeCanvasContext.stroke();
 }
 
-var topoid;
-
 // update large & small smallContext, based on update function (either rotationAndScaleTween or rotationTween)
 function rotateAndScale() {
   (function transition() {
@@ -667,13 +669,13 @@ function rotateAndScale() {
   })()
 }
 
-
-
 function rotationAndScaleTween() {
   var r1 = d3.interpolate(largeMapObjects[0].projection.rotate(), [-state.latLon[0].lon, -state.latLon[0].lat]);
   var r2 = d3.interpolate(largeMapObjects[1].projection.rotate(), [-state.latLon[1].lon, -state.latLon[1].lat]);
-  // var interpolateScale = d3.interpolate(largeMapObjects[0].projection.scale(), state.scale);
-  var interpolateScale = d3.interpolate(zoomToBoxScale(largeMapObjects[0].projection.scale()), zoomToBoxScale(largeMapObjects[1].projection.scale()))
+  var interpolateScale = d3.interpolate(
+    zoomToBoxScale(largeMapObjects[0].projection.scale()), 
+    zoomToBoxScale(largeMapObjects[1].projection.scale())
+  )
 
   return function(t) {
     // update rotation
@@ -686,88 +688,4 @@ function rotationAndScaleTween() {
 
     drawCanvasLarge()
   };
-}
-
-// update functions
-var updateHash = function() {
-  // window.location.hash = "scale=" + state.scale + "&center0=" + state.latLon[0].lat + "," + state.latLon[0].lon + "&center1=" + state.latLon[1].lat + "," + state.latLon[1].lon;
-  // slider.property("value", state.scale)
-}
-
-// DRAG
-function dragSetupSmall(name) {
-  function resetDrag() {
-    dragDistance = {
-      x: 0,
-      y: 0
-    };
-  }
-
-  var dragDistance = {
-    x: 0,
-    y: 0
-  };
-
-  return d3.behavior.drag()
-    .on("dragstart", function() {
-      d3.event.sourceEvent.preventDefault();
-    })
-    .on("drag", function() {
-      dragDistance.x = dragDistance.x + d3.event.dx;
-      dragDistance.y = dragDistance.y + d3.event.dy;
-      resetDrag()
-    })
-    .on("dragend", function() {
-      resetDrag()
-    })
-}
-
-function dragSetupLarge() {
-
-  function resetDrag() {
-    dragDistance = {
-      x: 0,
-      y: 0
-    };
-  }
-
-  var dragDistance = {
-    x: 0,
-    y: 0
-  };
-
-  return d3.behavior.drag()
-    .on("dragstart", function() {
-      d3.event.sourceEvent.preventDefault();
-    })
-    .on("drag", function() {
-      dragDistance.x = dragDistance.x + d3.event.dx;
-      dragDistance.y = dragDistance.y + d3.event.dy;
-      updateRotateFromLargeDrag(dragDistance)
-      resetDrag()
-    })
-    .on("dragend", function() {
-      updateRotateFromLargeDrag(dragDistance)
-      resetDrag()
-    });
-}
-
-
-function updateRotateFromLargeDrag(pixelDifference) {
-  var newRotate0 = pixelDiff_to_rotation_large(largeMapObjects[0].projection, pixelDifference)
-  var newRotate1 = pixelDiff_to_rotation_large(largeMapObjects[1].projection, pixelDifference)
-
-  // set new rotate
-  // mapObjects[0].projection.rotate(newRotate0)
-  // mapObjects[1].projection.rotate(newRotate1)
-  largeMapObjects[0].projection.rotate(newRotate0)
-  largeMapObjects[1].projection.rotate(newRotate1)
-  updateStateRotation(newRotate0, 0)
-  updateStateRotation(newRotate1, 1)
-
-  updateRotationFromLargePan(name)
-}
-
-function updateRotationFromLargePan() {
-  drawCanvasLarge()
 }
