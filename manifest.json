@@ -22,7 +22,7 @@
     }
   ],
   "background": {
-    "scripts": ["js/jquery-2.2.3.js","js/jquery-ui.js", "background.js"],
+    "scripts": ["js/jquery-2.2.3.js","js/jquery-ui.js", "js/background.js"],
     "persistent": false
   },
   "browser_action": {
