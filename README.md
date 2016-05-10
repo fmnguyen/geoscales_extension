@@ -1,6 +1,6 @@
-# geoscales_extension
+# Geoscales Extension
 A Google Chrome extension to give personal spatial analogies in articles and webpages
-
+For more information, visit the site at [atlasofme.tk](http://atlasofme.tk)
 #INSTALLATION
 
 Download the zipped folder and unzip. 
