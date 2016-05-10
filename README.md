@@ -16,6 +16,4 @@ Click on measurements or location references, which will be highlighted.
 Atlas of Me was developed by Yea-Seul Kim and Francis Nguyen.
 For more information on the project, see our ACM CHI paper:
 Generating Personalized Spatial Analogies for Distances and Areas
-by Yea-Seul Kim, Jessica Hullman, and Maneesh Agrawala
-http://faculty.washington.edu/jhullman/spatialAnalogies.pdf
-
+by Yea-Seul Kim, Jessica Hullman, and Maneesh Agrawala https://idl.cs.washington.edu/papers/spatial-analogies/
