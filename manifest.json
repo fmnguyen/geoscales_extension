@@ -1,7 +1,7 @@
 {
   "name": "Atlas of Me",
   "version": "1.1",
-  "description": "TBD",
+  "description": "A Chrome plugin that presents on-demand personalized maps for unfamiliar distances, areas, and locations.",
   "permissions": [
     "tabs",
     "activeTab",
@@ -30,6 +30,11 @@
       "default_icon": "images/icon-inactive.png",
       "default_popup": "popup.html"
   },
+
+  "icons": {           
+          "128": "images/logo-128.png" },
+
+
   "web_accessible_resources": [
     "topofile/us.json",
     "topofile/world-110m.json",
